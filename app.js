@@ -37,7 +37,8 @@ const state = {
   // New features state
   mobileMenuOpen: false,
   categoryModalOpen: false,
-  addedItems:     {}
+  addedItems:     {},
+  cartBouncing:   false
 };
 
 window.state = state;
@@ -71,7 +72,7 @@ function init() {
   state.cart = storedCart ? JSON.parse(storedCart) : [];
 
   // Check staff login
-  state.isLoggedIn = sessionStorage.getItem('salwa_logged_in') === 'true';
+  state.isLoggedIn = localStorage.getItem('salwa_logged_in') === 'true';
 
   // Setup router
   window.addEventListener('hashchange', router);
@@ -98,6 +99,18 @@ function handleStorageChange(e) {
     if (state.currentView === 'dashboard' && state.orders.length > oldLength) {
       playNewOrderChime();
       showToast('New order received! 🧁', 'success');
+    }
+    render();
+  }
+  if (e.key === 'salwa_menu') {
+    const storedMenu = localStorage.getItem('salwa_menu');
+    state.menuItems = storedMenu ? JSON.parse(storedMenu) : [...DEFAULT_MENU_ITEMS];
+    render();
+  }
+  if (e.key === 'salwa_categories') {
+    const storedCats = localStorage.getItem('salwa_categories');
+    if (storedCats) {
+      CATEGORIES = JSON.parse(storedCats);
       render();
     }
   }
@@ -155,6 +168,10 @@ function router() {
       state.currentView = 'menu';
       break;
     case 'staff-login':
+      if (state.isLoggedIn) {
+        window.location.hash = '#dashboard';
+        return;
+      }
       state.currentView = 'staff-login';
       break;
     case 'dashboard':
@@ -228,7 +245,15 @@ function renderLanding() {
               <span>🔐</span> ${t('staffPortal')}
             </a>
           </div>
-          <p class="landing-footer">📍 Canada, GTA · 💌 DM us @salwas.bakery</p>
+          <p class="landing-footer">
+            <span>📍 Canada, GTA</span> · 
+            <a href="https://www.instagram.com/salwas.bakery" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="display: inline-block; vertical-align: middle;">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              <span>@salwas.bakery</span>
+            </a>
+          </p>
         </div>
       </div>
     </div>
@@ -341,7 +366,7 @@ function renderNavbar(isStaff = false) {
         <button class="btn-settings" data-action="toggle-settings" aria-label="${t('settings')}">
           <svg class="settings-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </button>
-        <button class="btn-cart" data-action="toggle-cart">
+        <button class="btn-cart ${state.cartBouncing ? 'cart-bounce-active' : ''}" data-action="toggle-cart">
           <svg class="cart-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           ${getCartCount() > 0 ? `<span class="cart-badge">${getCartCount()}</span>` : ''}
         </button>
@@ -349,7 +374,7 @@ function renderNavbar(isStaff = false) {
 
       <!-- Mobile Right Items (only visible on mobile, keeping cart visible) -->
       <div class="mobile-right-items mobile-only">
-        <button class="btn-cart" data-action="toggle-cart">
+        <button class="btn-cart ${state.cartBouncing ? 'cart-bounce-active' : ''}" data-action="toggle-cart">
           <svg class="cart-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           ${getCartCount() > 0 ? `<span class="cart-badge">${getCartCount()}</span>` : ''}
         </button>
@@ -1276,9 +1301,15 @@ function addToCart(itemId) {
   
   // Trigger button micro-interaction feedback
   state.addedItems[itemId] = true;
+  state.cartBouncing = true;
   
   showToast(`${item ? item.name : 'Item'} added to cart! 🛒`, 'success');
   render();
+
+  setTimeout(() => {
+    state.cartBouncing = false;
+    render();
+  }, 600);
 
   setTimeout(() => {
     if (state.addedItems[itemId]) {
@@ -1407,7 +1438,7 @@ function staffLogin(form) {
 
   if (username === STAFF_CREDENTIALS.username && password === STAFF_CREDENTIALS.password) {
     state.isLoggedIn = true;
-    sessionStorage.setItem('salwa_logged_in', 'true');
+    localStorage.setItem('salwa_logged_in', 'true');
     showToast('Welcome back! 👋', 'success');
     window.location.hash = '#dashboard';
   } else {
@@ -1426,7 +1457,7 @@ function staffLogin(form) {
 
 function staffLogout() {
   state.isLoggedIn = false;
-  sessionStorage.removeItem('salwa_logged_in');
+  localStorage.removeItem('salwa_logged_in');
   showToast('Logged out successfully', 'success');
   window.location.hash = '#landing';
 }
@@ -1823,17 +1854,29 @@ function renderSettingsModal() {
             <div class="theme-picker-grid">
               <label class="theme-option">
                 <input type="radio" name="theme" value="light" ${state.theme === 'light' ? 'checked' : ''} />
-                <span class="theme-preview light-preview"></span>
+                <div class="theme-card-preview light-card-preview">
+                  <div class="mini-header"></div>
+                  <div class="mini-text"></div>
+                  <div class="mini-button"></div>
+                </div>
                 <span class="theme-label">${t('light')}</span>
               </label>
               <label class="theme-option">
                 <input type="radio" name="theme" value="dark" ${state.theme === 'dark' ? 'checked' : ''} />
-                <span class="theme-preview dark-preview"></span>
+                <div class="theme-card-preview dark-card-preview">
+                  <div class="mini-header"></div>
+                  <div class="mini-text"></div>
+                  <div class="mini-button"></div>
+                </div>
                 <span class="theme-label">${t('dark')}</span>
               </label>
               <label class="theme-option">
                 <input type="radio" name="theme" value="cream" ${state.theme === 'cream' ? 'checked' : ''} />
-                <span class="theme-preview cream-preview"></span>
+                <div class="theme-card-preview cream-card-preview">
+                  <div class="mini-header"></div>
+                  <div class="mini-text"></div>
+                  <div class="mini-button"></div>
+                </div>
                 <span class="theme-label">${t('cream')}</span>
               </label>
             </div>
