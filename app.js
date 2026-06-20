@@ -1731,7 +1731,13 @@ function renderSettingsModal() {
     <div class="modal-overlay ${state.settingsOpen ? 'open' : ''}" data-action="close-settings">
       <div class="modal settings-modal ${state.settingsOpen ? 'open' : ''}" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h3>⚙️ ${t('settings')}</h3>
+          <div class="modal-title-group">
+            <svg class="modal-header-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <h3>${t('settings')}</h3>
+          </div>
           <button class="btn-close" data-action="close-settings">&times;</button>
         </div>
         
@@ -1742,15 +1748,15 @@ function renderSettingsModal() {
             <div class="lang-picker-group">
               <label class="lang-option">
                 <input type="radio" name="language" value="en" ${isEn ? 'checked' : ''} />
-                <span class="lang-pill">🇺🇸 English</span>
+                <span class="lang-pill">English</span>
               </label>
               <label class="lang-option">
                 <input type="radio" name="language" value="fr" ${isFr ? 'checked' : ''} />
-                <span class="lang-pill">🇫🇷 Français</span>
+                <span class="lang-pill">Français</span>
               </label>
               <label class="lang-option">
                 <input type="radio" name="language" value="ar" ${isAr ? 'checked' : ''} />
-                <span class="lang-pill">🇸🇦 العربية</span>
+                <span class="lang-pill">العربية</span>
               </label>
             </div>
           </div>
@@ -1783,41 +1789,51 @@ function renderSettingsModal() {
             <div class="font-picker-group">
               <label class="font-option">
                 <input type="radio" name="fontSize" value="sm" ${state.fontSize === 'sm' ? 'checked' : ''} />
-                <span>A-</span>
+                <span class="font-preview-label font-preview-sm">A</span>
                 <span class="font-label">${t('sm')}</span>
               </label>
               <label class="font-option">
                 <input type="radio" name="fontSize" value="md" ${state.fontSize === 'md' ? 'checked' : ''} />
-                <span>A</span>
+                <span class="font-preview-label font-preview-md">A</span>
                 <span class="font-label">${t('md')}</span>
               </label>
               <label class="font-option">
                 <input type="radio" name="fontSize" value="lg" ${state.fontSize === 'lg' ? 'checked' : ''} />
-                <span>A+</span>
+                <span class="font-preview-label font-preview-lg">A</span>
                 <span class="font-label">${t('lg')}</span>
               </label>
               <label class="font-option">
                 <input type="radio" name="fontSize" value="xl" ${state.fontSize === 'xl' ? 'checked' : ''} />
-                <span>A++</span>
+                <span class="font-preview-label font-preview-xl">A</span>
                 <span class="font-label">${t('xl')}</span>
               </label>
             </div>
           </div>
 
-          <!-- Accessibility Checkboxes -->
-          <div class="form-group accessibility-checkboxes">
-            <label class="checkbox-label">
-              <input type="checkbox" name="reducedMotion" ${state.reducedMotion ? 'checked' : ''} />
-              <span>🏃‍♂️ ${t('reducedMotion')}</span>
-            </label>
-            <label class="checkbox-label" style="margin-top: 12px; display: block;">
-              <input type="checkbox" name="highContrast" ${state.highContrast ? 'checked' : ''} />
-              <span>👁️ ${t('highContrast')}</span>
-            </label>
+          <!-- Accessibility Options -->
+          <div class="form-group accessibility-options-group" style="margin-top: 20px;">
+            <div class="toggle-option-row">
+              <div class="toggle-info">
+                <span class="toggle-title">${t('reducedMotion')}</span>
+              </div>
+              <label class="switch-toggle">
+                <input type="checkbox" name="reducedMotion" ${state.reducedMotion ? 'checked' : ''} />
+                <span class="slider-round"></span>
+              </label>
+            </div>
+            <div class="toggle-option-row" style="margin-top: 16px;">
+              <div class="toggle-info">
+                <span class="toggle-title">${t('highContrast')}</span>
+              </div>
+              <label class="switch-toggle">
+                <input type="checkbox" name="highContrast" ${state.highContrast ? 'checked' : ''} />
+                <span class="slider-round"></span>
+              </label>
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 24px;">
-            🎉 ${t('saveSettings')}
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 28px;">
+            ${t('saveSettings')}
           </button>
         </form>
       </div>
