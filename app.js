@@ -239,14 +239,14 @@ function renderNavbar(isStaff = false) {
         <div class="navbar-links">
           <button class="nav-tab ${state.dashboardTab === 'orders' ? 'active' : ''}"
                   data-action="switch-dash-tab" data-tab="orders">
-            📋 Orders
+            📋 ${t('ordersToday')}
           </button>
           <button class="nav-tab ${state.dashboardTab === 'menu-manage' ? 'active' : ''}"
                   data-action="switch-dash-tab" data-tab="menu-manage">
-            📝 Menu
+            📝 ${t('menuItems')}
           </button>
           <button class="btn btn-outline btn-sm" data-action="staff-logout">
-            🚪 Logout
+            🚪 ${t('logout')}
           </button>
         </div>
       </nav>
@@ -261,13 +261,19 @@ function renderNavbar(isStaff = false) {
         <span>Salwa's Bakery</span>
       </a>
       <div class="navbar-links">
-        <a href="#landing" class="nav-link">🏠 ${t('home')}</a>
-        <a href="#track-order" class="nav-link">🔍 ${t('trackOrder')}</a>
-        <button class="btn-settings" data-action="toggle-settings" style="background:none; border:none; font-size:1.25rem; cursor:pointer; margin: 0 4px; transition: var(--transition);" aria-label="${t('settings')}">
-          ⚙️
+        <a href="#landing" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>${t('home')}</span>
+        </a>
+        <a href="#track-order" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>${t('trackOrder')}</span>
+        </a>
+        <button class="btn-settings" data-action="toggle-settings" aria-label="${t('settings')}">
+          <svg class="settings-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </button>
         <button class="btn-cart" data-action="toggle-cart">
-          🛒
+          <svg class="cart-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           ${getCartCount() > 0 ? `<span class="cart-badge">${getCartCount()}</span>` : ''}
         </button>
       </div>
