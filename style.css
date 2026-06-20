@@ -2546,4 +2546,27 @@ body.theme-cream .navbar {
   transform: translateY(-1px);
 }
 
+.btn-logout-icon {
+  background: none;
+  border: none;
+  color: var(--text-gray);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-logout-icon:hover {
+  background: var(--gray-light);
+  color: var(--dark);
+}
+
+.mobile-nav-item.active {
+  background: var(--pink-lightest) !important;
+  color: var(--pink-primary) !important;
+  font-weight: 600 !important;
+}
+
 

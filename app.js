@@ -243,12 +243,23 @@ function renderLanding() {
 function renderNavbar(isStaff = false) {
   if (isStaff) {
     return `
-      <nav class="navbar navbar-staff">
+      <nav class="navbar navbar-staff animate-fade-in">
+        <!-- Mobile Burger Toggle (only visible on mobile) -->
+        <button class="btn-burger mobile-only" data-action="toggle-mobile-menu" aria-label="Toggle Menu">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
         <a href="#landing" class="navbar-brand">
           <img src="assets/logo.png" alt="Logo" class="navbar-logo" />
           <span>Salwa's Bakery</span>
         </a>
-        <div class="navbar-links">
+
+        <!-- Desktop Links (hidden on mobile) -->
+        <div class="navbar-links desktop-only">
           <button class="nav-tab ${state.dashboardTab === 'orders' ? 'active' : ''}"
                   data-action="switch-dash-tab" data-tab="orders">
             📋 ${t('ordersToday')}
@@ -261,6 +272,41 @@ function renderNavbar(isStaff = false) {
             🚪 ${t('logout')}
           </button>
         </div>
+
+        <!-- Mobile Right Items (only visible on mobile) -->
+        <div class="mobile-right-items mobile-only">
+          <button class="btn-logout-icon" data-action="staff-logout" aria-label="${t('logout')}">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </div>
+
+        <!-- Mobile Sidebar Navigation Drawer -->
+        <div class="mobile-nav-overlay ${state.mobileMenuOpen ? 'open' : ''}" data-action="toggle-mobile-menu"></div>
+        <aside class="mobile-nav-sidebar ${state.mobileMenuOpen ? 'open' : ''}">
+          <div class="mobile-nav-header">
+            <div class="navbar-brand">
+              <img src="assets/logo.png" alt="Logo" class="navbar-logo" />
+              <span>Salwa's Bakery</span>
+            </div>
+            <button class="btn-close" data-action="toggle-mobile-menu">&times;</button>
+          </div>
+          <div class="mobile-nav-body">
+            <button class="mobile-nav-item mobile-nav-btn ${state.dashboardTab === 'orders' ? 'active' : ''}"
+                    data-action="switch-dash-tab-mobile" data-tab="orders">
+              <span>📋</span>
+              <span>${t('ordersToday')}</span>
+            </button>
+            <button class="mobile-nav-item mobile-nav-btn ${state.dashboardTab === 'menu-manage' ? 'active' : ''}"
+                    data-action="switch-dash-tab-mobile" data-tab="menu-manage">
+              <span>📝</span>
+              <span>${t('menuItems')}</span>
+            </button>
+            <button class="mobile-nav-item mobile-nav-btn" data-action="staff-logout-mobile" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
+              <span>🚪</span>
+              <span>${t('logout')}</span>
+            </button>
+          </div>
+        </aside>
       </nav>
     `;
   }
@@ -1088,7 +1134,17 @@ function handleGlobalClick(e) {
       staffLogout();
       break;
 
+    case 'staff-logout-mobile':
+      state.mobileMenuOpen = false;
+      staffLogout();
+      break;
+
     case 'switch-dash-tab':
+      switchDashTab(target.dataset.tab);
+      break;
+
+    case 'switch-dash-tab-mobile':
+      state.mobileMenuOpen = false;
       switchDashTab(target.dataset.tab);
       break;
 
