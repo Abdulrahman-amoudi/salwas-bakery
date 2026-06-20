@@ -2639,4 +2639,28 @@ body.theme-cream .navbar {
   font-weight: 600 !important;
 }
 
+.btn-remove-track {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+}
+.btn-remove-track:hover {
+  color: var(--danger);
+  transform: scale(1.2);
+  opacity: 1;
+}
+body.rtl-layout .btn-remove-track {
+  margin-left: 0;
+  margin-right: auto;
+}
+
 

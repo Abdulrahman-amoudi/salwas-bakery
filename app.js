@@ -63,9 +63,23 @@ function init() {
   const storedMenu = localStorage.getItem('salwa_menu');
   state.menuItems = storedMenu ? JSON.parse(storedMenu) : [...DEFAULT_MENU_ITEMS];
 
-  // Load persisted orders
+  // Load persisted orders and clean up old format ones (e.g. SB-20260620-001)
   const storedOrders = localStorage.getItem('salwa_orders');
-  state.orders = storedOrders ? JSON.parse(storedOrders) : [];
+  let loadedOrders = storedOrders ? JSON.parse(storedOrders) : [];
+  state.orders = loadedOrders.filter(o => o.orderNumber && /^SB-\d{3,4}$/.test(o.orderNumber));
+  if (state.orders.length !== loadedOrders.length) {
+    saveOrders();
+  }
+
+  // Clean up customer history in localStorage
+  const storedHistory = localStorage.getItem('salwa_customer_history');
+  if (storedHistory) {
+    const history = JSON.parse(storedHistory);
+    const cleanedHistory = history.filter(num => /^SB-\d{3,4}$/.test(num));
+    if (cleanedHistory.length !== history.length) {
+      localStorage.setItem('salwa_customer_history', JSON.stringify(cleanedHistory));
+    }
+  }
 
   // Restore cart from sessionStorage (survives page refreshes)
   const storedCart = sessionStorage.getItem('salwa_cart');
@@ -749,9 +763,10 @@ function renderTrackOrder() {
                       <span class="recent-num">${o.orderNumber}</span>
                       <span class="recent-date">${formatDate(o.createdAt)}</span>
                     </div>
-                    <div class="recent-track-status">
+                    <div class="recent-track-status" style="display: flex; align-items: center; gap: 8px;">
                       <span class="status-badge status-${slugify(o.status)}">${t(slugify(o.status))}</span>
                       <span class="recent-total">${formatCurrency(o.total)}</span>
+                      <button class="btn-remove-track" data-action="remove-track-history" data-id="${o.orderNumber}" title="Remove from history" onclick="event.stopPropagation()">&times;</button>
                     </div>
                   </div>
                 `;
@@ -987,6 +1002,9 @@ function renderOrdersTab() {
                         <button class="btn btn-outline btn-sm btn-print" data-action="print-order" data-id="${o.orderNumber}">
                           🖨️ ${t('print')}
                         </button>
+                        <button class="btn btn-danger btn-sm" data-action="delete-order" data-id="${o.orderNumber}" title="Delete Order">
+                          🗑️
+                        </button>
                       </div>
                       
                       <select class="status-select" data-action="update-order-status" data-order-id="${o.orderNumber}">
@@ -1167,6 +1185,26 @@ function handleGlobalClick(e) {
     case 'switch-dash-tab':
       switchDashTab(target.dataset.tab);
       break;
+
+    case 'delete-order': {
+      const orderId = target.dataset.id;
+      if (!confirm(`Delete order ${orderId}? This cannot be undone.`)) return;
+      state.orders = state.orders.filter(o => o.orderNumber !== orderId);
+      saveOrders();
+      showToast(`Order ${orderId} deleted`, 'success');
+      render();
+      break;
+    }
+
+    case 'remove-track-history': {
+      const orderNum = target.dataset.id;
+      let history = getCustomerOrderHistory();
+      history = history.filter(num => num !== orderNum);
+      localStorage.setItem('salwa_customer_history', JSON.stringify(history));
+      showToast('Order removed from history', 'success');
+      render();
+      break;
+    }
 
     case 'switch-dash-tab-mobile':
       state.mobileMenuOpen = false;
