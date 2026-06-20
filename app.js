@@ -650,8 +650,6 @@ function renderTrackOrder() {
 function renderTrackingStepper(status) {
   const steps = [
     { label: t('orderReceived'), status: 'Pending', icon: '📝', desc: t('orderReceivedDesc') },
-    { label: t('preparing'), status: 'In Progress', icon: '👩‍🍳', desc: t('preparingDesc') },
-    { label: t('ready'), status: 'Ready', icon: '📦', desc: t('readyDesc') },
     { label: t('completed'), status: 'Completed', icon: '🎉', desc: t('completedDesc') }
   ];
 
@@ -856,22 +854,12 @@ function renderOrdersTab() {
                     <td class="actions-cell">
                       <div class="action-buttons-group">
                         ${o.status === 'Pending' ? `
-                          <button class="btn btn-primary btn-sm btn-quick" data-action="quick-status" data-order-id="${o.orderNumber}" data-status="In Progress">
-                            🍳 Prep
-                          </button>
-                        ` : ''}
-                        ${o.status === 'In Progress' ? `
-                          <button class="btn btn-warning btn-sm btn-quick" data-action="quick-status" data-order-id="${o.orderNumber}" data-status="Ready">
-                            📦 Ready
-                          </button>
-                        ` : ''}
-                        ${o.status === 'Ready' ? `
                           <button class="btn btn-success btn-sm btn-quick" data-action="quick-status" data-order-id="${o.orderNumber}" data-status="Completed">
-                            ✅ Complete
+                            ✅ ${t('complete')}
                           </button>
                         ` : ''}
                         <button class="btn btn-outline btn-sm btn-print" data-action="print-order" data-id="${o.orderNumber}">
-                          🖨️ Print
+                          🖨️ ${t('print')}
                         </button>
                       </div>
                       

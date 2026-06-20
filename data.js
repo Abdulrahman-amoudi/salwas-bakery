@@ -58,7 +58,7 @@ const STAFF_CREDENTIALS = {
 };
 
 /** Possible order lifecycle statuses. */
-const ORDER_STATUSES = ['Pending', 'In Progress', 'Ready', 'Completed'];
+const ORDER_STATUSES = ['Pending', 'Completed'];
 
 /**
  * Generate a unique, human-readable order number.
