@@ -42,7 +42,7 @@ const DEFAULT_MENU_ITEMS = [
  * Menu categories with display names and emoji icons.
  * "all" is a virtual category showing every item.
  */
-const CATEGORIES = [
+let CATEGORIES = [
   { id: 'all',      name: 'All Items',          icon: '✨' },
   { id: 'cakes',    name: 'Cakes',              icon: '🎂' },
   { id: 'cupcakes', name: 'Cupcakes',           icon: '🧁' },
@@ -53,8 +53,8 @@ const CATEGORIES = [
 
 /** Hard-coded staff credentials (demo only). */
 const STAFF_CREDENTIALS = {
-  username: 'admin',
-  password: 'salwa2024'
+  username: 'salwa',
+  password: 'amoudi'
 };
 
 /** Possible order lifecycle statuses. */
@@ -62,20 +62,30 @@ const ORDER_STATUSES = ['Pending', 'Completed'];
 
 /**
  * Generate a unique, human-readable order number.
- * Format: SB-YYYYMMDD-001
- * The sequence resets each day.
+ * Format: SB-101, SB-102, sequential.
  */
 function generateOrderNumber() {
-  const now  = new Date();
-  const date = now.getFullYear().toString() +
-    (now.getMonth() + 1).toString().padStart(2, '0') +
-    now.getDate().toString().padStart(2, '0');
-
-  const orders      = JSON.parse(localStorage.getItem('salwa_orders') || '[]');
-  const todayOrders = orders.filter(o => o.orderNumber && o.orderNumber.includes(date));
-  const seq         = (todayOrders.length + 1).toString().padStart(3, '0');
-
-  return `SB-${date}-${seq}`;
+  const orders = JSON.parse(localStorage.getItem('salwa_orders') || '[]');
+  let nextSeq = 101;
+  if (orders.length > 0) {
+    const seqs = orders.map(o => {
+      if (o.orderNumber && o.orderNumber.startsWith('SB-')) {
+        const num = parseInt(o.orderNumber.substring(3), 10);
+        // Ignore large date-based numbers (e.g. YYYYMMDD)
+        if (!isNaN(num) && num < 100000) {
+          return num;
+        }
+      }
+      return 0;
+    });
+    const maxSeq = Math.max(...seqs);
+    if (maxSeq >= 101) {
+      nextSeq = maxSeq + 1;
+    } else {
+      nextSeq = 101 + orders.length;
+    }
+  }
+  return `SB-${nextSeq}`;
 }
 
 // ============================================================
@@ -160,7 +170,15 @@ const TRANSLATIONS = {
     completedDesc: 'Picked up or delivered',
     orderReceived: 'Order Received',
     preparing: 'Preparing',
-    completed: 'Completed'
+    completed: 'Completed',
+    location: 'Delivery Address or "Pickup"',
+    locationPlaceholder: 'e.g. Pickup from store, or 123 Main St, Toronto',
+    addedSuccess: 'Added! ✓',
+    categories: 'Categories',
+    addCategory: 'Add Category',
+    categoryId: 'Category ID',
+    categoryName: 'Category Name',
+    categoryIcon: 'Emoji Icon'
   },
   fr: {
     home: 'Accueil',
@@ -240,7 +258,15 @@ const TRANSLATIONS = {
     completedDesc: 'Récupéré ou livré',
     orderReceived: 'Commande Reçue',
     preparing: 'En Préparation',
-    completed: 'Terminé'
+    completed: 'Terminé',
+    location: 'Adresse de livraison ou "Ramassage"',
+    locationPlaceholder: 'Ex: Ramassage en magasin, ou 123 Rue Principale, Toronto',
+    addedSuccess: 'Ajouté! ✓',
+    categories: 'Catégories',
+    addCategory: 'Ajouter une catégorie',
+    categoryId: 'ID de catégorie',
+    categoryName: 'Nom de la catégorie',
+    categoryIcon: 'Icône émoji'
   },
   ar: {
     home: 'الرئيسية',
@@ -320,7 +346,15 @@ const TRANSLATIONS = {
     completedDesc: 'تم الاستلام أو التوصيل',
     orderReceived: 'تم استلام الطلب',
     preparing: 'قيد التحضير',
-    completed: 'مكتمل'
+    completed: 'مكتمل',
+    location: 'العنوان أو "استلام من المتجر"',
+    locationPlaceholder: 'مثال: استلام من المتجر، أو 123 الشارع الرئيسي، تورونتو',
+    addedSuccess: 'تمت الإضافة! ✓',
+    categories: 'الفئات',
+    addCategory: 'إضافة فئة',
+    categoryId: 'معرف الفئة',
+    categoryName: 'اسم الفئة',
+    categoryIcon: 'رمز تعبيري'
   }
 };
 

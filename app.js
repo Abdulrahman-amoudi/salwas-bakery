@@ -32,7 +32,12 @@ const state = {
   fontSize:       'md',        // sm | md | lg | xl
   reducedMotion:  false,
   highContrast:   false,
-  settingsOpen:   false
+  settingsOpen:   false,
+
+  // New features state
+  mobileMenuOpen: false,
+  categoryModalOpen: false,
+  addedItems:     {}
 };
 
 window.state = state;
@@ -46,6 +51,12 @@ function init() {
   // Load settings
   loadSettings();
   applySettings();
+
+  // Load persisted categories
+  const storedCats = localStorage.getItem('salwa_categories');
+  if (storedCats) {
+    CATEGORIES = JSON.parse(storedCats);
+  }
 
   // Load persisted menu or fall back to defaults
   const storedMenu = localStorage.getItem('salwa_menu');
@@ -187,8 +198,9 @@ function render() {
   // Always ensure the toast container exists
   ensureToastContainer();
 
-  // Append settings modal to the DOM
+  // Append settings modal and category modal to the DOM
   app.innerHTML += renderSettingsModal();
+  app.innerHTML += renderCategoryModal();
 }
 
 
@@ -255,12 +267,23 @@ function renderNavbar(isStaff = false) {
 
   // Customer navbar
   return `
-    <nav class="navbar">
+    <nav class="navbar animate-fade-in">
+      <!-- Mobile Burger Toggle (only visible on mobile) -->
+      <button class="btn-burger mobile-only" data-action="toggle-mobile-menu" aria-label="Toggle Menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
       <a href="#landing" class="navbar-brand">
         <img src="assets/logo.png" alt="Logo" class="navbar-logo" />
         <span>Salwa's Bakery</span>
       </a>
-      <div class="navbar-links">
+
+      <!-- Desktop Links (hidden on mobile) -->
+      <div class="navbar-links desktop-only">
         <a href="#landing" class="nav-link">
           <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span>${t('home')}</span>
@@ -277,6 +300,44 @@ function renderNavbar(isStaff = false) {
           ${getCartCount() > 0 ? `<span class="cart-badge">${getCartCount()}</span>` : ''}
         </button>
       </div>
+
+      <!-- Mobile Right Items (only visible on mobile, keeping cart visible) -->
+      <div class="mobile-right-items mobile-only">
+        <button class="btn-cart" data-action="toggle-cart">
+          <svg class="cart-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          ${getCartCount() > 0 ? `<span class="cart-badge">${getCartCount()}</span>` : ''}
+        </button>
+      </div>
+      
+      <!-- Mobile Sidebar Navigation Drawer -->
+      <div class="mobile-nav-overlay ${state.mobileMenuOpen ? 'open' : ''}" data-action="toggle-mobile-menu"></div>
+      <aside class="mobile-nav-sidebar ${state.mobileMenuOpen ? 'open' : ''}">
+        <div class="mobile-nav-header">
+          <div class="navbar-brand">
+            <img src="assets/logo.png" alt="Logo" class="navbar-logo" />
+            <span>Salwa's Bakery</span>
+          </div>
+          <button class="btn-close" data-action="toggle-mobile-menu">&times;</button>
+        </div>
+        <div class="mobile-nav-body">
+          <a href="#landing" class="mobile-nav-item" data-action="toggle-mobile-menu">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>${t('home')}</span>
+          </a>
+          <a href="#track-order" class="mobile-nav-item" data-action="toggle-mobile-menu">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>${t('trackOrder')}</span>
+          </a>
+          <button class="mobile-nav-item mobile-nav-btn" data-action="mobile-open-settings">
+            <svg class="settings-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>${t('settings')}</span>
+          </button>
+          <a href="#staff-login" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
+            <span>🔐</span>
+            <span>${t('staffPortal')}</span>
+          </a>
+        </div>
+      </aside>
     </nav>
   `;
 }
@@ -339,8 +400,8 @@ function renderMenu() {
                 <p class="card-desc">${escapeHtml(item.description)}</p>
                 <div class="card-footer">
                   <span class="card-price">${formatCurrency(item.price)}</span>
-                  <button class="btn btn-primary btn-sm" data-action="add-to-cart" data-id="${item.id}">
-                    + ${t('addToCart')}
+                  <button class="btn ${state.addedItems[item.id] ? 'btn-success btn-added' : 'btn-primary'} btn-sm" data-action="add-to-cart" data-id="${item.id}">
+                    ${state.addedItems[item.id] ? `✓ ${t('addedSuccess')}` : `+ ${t('addToCart')}`}
                   </button>
                 </div>
               </div>
@@ -402,7 +463,7 @@ function renderCartSidebar() {
       ${state.cart.length > 0 ? `
         <div class="cart-footer">
           <div class="cart-order-preview">
-            <span>🎫</span> ${t('estOrderId')}: SB-${new Date().getFullYear()}${(new Date().getMonth()+1).toString().padStart(2,'0')}${new Date().getDate().toString().padStart(2,'0')}-XXX
+            <span>🎫</span> ${t('estOrderId')}: ${generateOrderNumber()}
           </div>
           <div class="cart-total">
             <span>${t('total')}</span>
@@ -440,15 +501,8 @@ function renderCheckoutModal() {
             <input type="tel" id="custPhone" name="phone" required placeholder="${t('phone')}" />
           </div>
           <div class="form-group">
-            <label for="custEmail">${t('email')} (${state.language === 'ar' ? 'اختياري' : (state.language === 'fr' ? 'optionnel' : 'optional')})</label>
-            <input type="email" id="custEmail" name="email" placeholder="you@example.com" />
-          </div>
-          <div class="form-group">
-            <label for="orderType">${t('orderType')}</label>
-            <select id="orderType" name="orderType">
-              <option value="pickup">🏪 ${t('pickup')}</option>
-              <option value="delivery">🚗 ${t('delivery')}</option>
-            </select>
+            <label for="custLocation">${t('location')} *</label>
+            <input type="text" id="custLocation" name="location" required placeholder="${t('locationPlaceholder')}" />
           </div>
           <div class="form-group">
             <label for="orderNotes">${t('specialNotes')}</label>
@@ -525,8 +579,7 @@ function renderOrderConfirmation() {
         <div class="confirm-info">
           <p><strong>${t('customer')}:</strong> ${escapeHtml(order.customerName)}</p>
           <p><strong>${t('phone')}:</strong> ${escapeHtml(order.phone)}</p>
-          ${order.email ? `<p><strong>${t('email')}:</strong> ${escapeHtml(order.email)}</p>` : ''}
-          <p><strong>${t('orderType')}:</strong> ${order.type === 'pickup' ? `🏪 ${t('pickup')}` : `🚗 ${t('delivery')}`}</p>
+          <p><strong>${t('location')}:</strong> ${escapeHtml(order.location)}</p>
           ${order.notes ? `<p><strong>${t('specialNotes')}:</strong> ${escapeHtml(order.notes)}</p>` : ''}
         </div>
 
@@ -560,7 +613,7 @@ function renderTrackOrder() {
 
         <form class="track-form" data-form="track">
           <input type="text" name="orderNumber" required 
-                 placeholder="e.g. SB-20260620-001" 
+                 placeholder="e.g. SB-101" 
                  value="${state.trackedOrderId || ''}" 
                  class="search-input track-input" />
           <button type="submit" class="btn btn-primary">${t('trackOrder')}</button>
@@ -597,7 +650,7 @@ function renderTrackOrder() {
                 </div>
                 <div class="track-meta-info">
                   <p><strong>${t('customer')}:</strong> ${escapeHtml(trackedOrder.customerName)}</p>
-                  <p><strong>${t('orderType')}:</strong> ${trackedOrder.type === 'pickup' ? `🏪 ${t('pickup')}` : `🚗 ${t('delivery')}`}</p>
+                  <p><strong>${t('location')}:</strong> ${escapeHtml(trackedOrder.location)}</p>
                   <p><strong>${t('datePlaced')}:</strong> ${formatDateFull(new Date(trackedOrder.createdAt))} ${state.language === 'ar' ? 'في' : (state.language === 'fr' ? 'à' : 'at')} ${formatTime(trackedOrder.createdAt)}</p>
                   ${trackedOrder.notes ? `<p><strong>${t('specialNotes')}:</strong> ${escapeHtml(trackedOrder.notes)}</p>` : ''}
                 </div>
@@ -843,7 +896,9 @@ function renderOrdersTab() {
                     <td class="order-num">${o.orderNumber}</td>
                     <td>
                       <strong>${escapeHtml(o.customerName)}</strong><br/>
-                      <span class="text-muted">${escapeHtml(o.phone || '')}</span>
+                      <span class="text-muted">${escapeHtml(o.phone || '')}</span><br/>
+                      <span class="order-loc-badge">📍 ${escapeHtml(o.location || '')}</span>
+                      ${o.notes ? `<br/><span class="order-notes-badge">📝 ${escapeHtml(o.notes)}</span>` : ''}
                     </td>
                     <td class="items-cell">
                       ${(o.items || []).map(i => `${escapeHtml(i.name)} ×${i.qty}`).join('<br/>')}
@@ -880,13 +935,11 @@ function renderOrdersTab() {
 }
 
 
-// ── Dashboard: Menu Management Tab ───────────────────────────
-
 function renderMenuManageTab() {
   return `
     <div class="dash-section">
       <div class="section-header">
-        <h3>📝 Menu Management</h3>
+        <h3>📝 Menu Items</h3>
         <button class="btn btn-primary btn-sm" data-action="open-add-menu-item">
           + Add New Item
         </button>
@@ -906,6 +959,30 @@ function renderMenuManageTab() {
               <button class="btn btn-outline btn-sm" data-action="edit-menu-item" data-id="${item.id}">✏️ Edit</button>
               <button class="btn btn-danger btn-sm" data-action="delete-menu-item" data-id="${item.id}">🗑️ Delete</button>
             </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="divider" style="margin: 40px 0 20px 0; border-top: 1px solid var(--gray-border);"></div>
+
+      <div class="section-header">
+        <h3>🎀 Categories</h3>
+        <button class="btn btn-primary btn-sm" data-action="open-add-category">
+          + Add New Category
+        </button>
+      </div>
+
+      <div class="categories-manage-grid">
+        ${CATEGORIES.filter(c => c.id !== 'all').map(cat => `
+          <div class="manage-card category-manage-card" style="padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.5rem;">${cat.icon}</span>
+              <div>
+                <h4 style="margin:0; font-family:var(--font-family); color:var(--text-dark);">${escapeHtml(cat.name)}</h4>
+                <p class="text-muted" style="margin:0; font-size:0.8rem;">ID: ${escapeHtml(cat.id)}</p>
+              </div>
+            </div>
+            <button class="btn btn-danger btn-sm" data-action="delete-category" data-id="${cat.id}">🗑️ Delete</button>
           </div>
         `).join('')}
       </div>
@@ -1061,6 +1138,26 @@ function handleGlobalClick(e) {
       state.settingsOpen = false;
       render();
       break;
+    case 'toggle-mobile-menu':
+      state.mobileMenuOpen = !state.mobileMenuOpen;
+      render();
+      break;
+    case 'mobile-open-settings':
+      state.mobileMenuOpen = false;
+      state.settingsOpen = true;
+      render();
+      break;
+    case 'open-add-category':
+      state.categoryModalOpen = true;
+      render();
+      break;
+    case 'close-category-modal':
+      state.categoryModalOpen = false;
+      render();
+      break;
+    case 'delete-category':
+      deleteCategory(target.dataset.id);
+      break;
   }
 }
 
@@ -1081,6 +1178,7 @@ function handleGlobalSubmit(e) {
     case 'menu-item': saveMenuItem(form);  break;
     case 'track':    trackOrderSubmit(form); break;
     case 'settings': saveSettingsForm(form); break;
+    case 'category': saveCategory(form);   break;
   }
 }
 
@@ -1119,8 +1217,19 @@ function addToCart(itemId) {
   }
   saveCart();
   const item = state.menuItems.find(m => m.id === itemId);
+  
+  // Trigger button micro-interaction feedback
+  state.addedItems[itemId] = true;
+  
   showToast(`${item ? item.name : 'Item'} added to cart! 🛒`, 'success');
   render();
+
+  setTimeout(() => {
+    if (state.addedItems[itemId]) {
+      delete state.addedItems[itemId];
+      render();
+    }
+  }, 1500);
 
   // Restore search input focus after render
   restoreSearchFocus();
@@ -1173,11 +1282,10 @@ function submitOrder(form) {
 
   const customerName = fd.get('customerName').trim();
   const phone        = fd.get('phone').trim();
-  const email        = (fd.get('email') || '').trim();
-  const orderType    = fd.get('orderType');
+  const location     = fd.get('location').trim();
   const notes        = (fd.get('notes') || '').trim();
 
-  if (!customerName || !phone) {
+  if (!customerName || !phone || !location) {
     showToast('Please fill in all required fields', 'error');
     return;
   }
@@ -1199,12 +1307,11 @@ function submitOrder(form) {
     orderNumber,
     customerName,
     phone,
-    email,
+    location,
     items: orderItems,
     total: getCartTotal(),
     status: 'Pending',
     createdAt: new Date().toISOString(),
-    type: orderType,
     notes
   };
 
@@ -1581,7 +1688,7 @@ function printOrder(orderNumber) {
           <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()} ${new Date(order.createdAt).toLocaleTimeString()}</p>
           <p><strong>Customer:</strong> ${order.customerName}</p>
           <p><strong>Phone:</strong> ${order.phone}</p>
-          <p><strong>Type:</strong> ${order.type.toUpperCase()}</p>
+          <p><strong>Location:</strong> ${escapeHtml(order.location)}</p>
           <div class="divider"></div>
           ${order.items.map(i => `
             <div class="row">
@@ -1632,11 +1739,20 @@ function renderSettingsModal() {
           <!-- Language Select -->
           <div class="form-group">
             <label>${t('language')}</label>
-            <select name="language" class="settings-select">
-              <option value="en" ${isEn ? 'selected' : ''}>🇺🇸 English</option>
-              <option value="fr" ${isFr ? 'selected' : ''}>🇫🇷 Français</option>
-              <option value="ar" ${isAr ? 'selected' : ''}>🇸🇦 العربية</option>
-            </select>
+            <div class="lang-picker-group">
+              <label class="lang-option">
+                <input type="radio" name="language" value="en" ${isEn ? 'checked' : ''} />
+                <span class="lang-pill">🇺🇸 English</span>
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="language" value="fr" ${isFr ? 'checked' : ''} />
+                <span class="lang-pill">🇫🇷 Français</span>
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="language" value="ar" ${isAr ? 'checked' : ''} />
+                <span class="lang-pill">🇸🇦 العربية</span>
+              </label>
+            </div>
           </div>
 
           <!-- Theme Select -->
@@ -1723,6 +1839,75 @@ function saveSettingsForm(form) {
   
   state.settingsOpen = false;
   showToast('Settings saved successfully! ⚙️', 'success');
+  render();
+}
+
+function renderCategoryModal() {
+  return `
+    <div class="modal-overlay ${state.categoryModalOpen ? 'open' : ''}" data-action="close-category-modal">
+      <div class="modal category-modal ${state.categoryModalOpen ? 'open' : ''}" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h3>➕ ${t('addCategory') || 'Add New Category'}</h3>
+          <button class="btn-close" data-action="close-category-modal">&times;</button>
+        </div>
+        <form id="categoryForm" data-form="category">
+          <div class="form-group">
+            <label>${t('categoryId') || 'Category ID'} * (lowercase, no spaces, e.g. brownies)</label>
+            <input type="text" name="catId" required placeholder="brownies" pattern="[a-z0-9-]+" title="Only lowercase letters, numbers, and dashes" />
+          </div>
+          <div class="form-group">
+            <label>${t('categoryName') || 'Category Name'} * (e.g. Fudgy Brownies)</label>
+            <input type="text" name="catName" required placeholder="Fudgy Brownies" />
+          </div>
+          <div class="form-group">
+            <label>${t('categoryIcon') || 'Emoji Icon'} * (e.g. 🍫)</label>
+            <input type="text" name="catIcon" required placeholder="🍫" style="font-size: 1.2rem;" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 16px;">
+            🎉 ${t('addCategory') || 'Add Category'}
+          </button>
+        </form>
+      </div>
+    </div>
+  `;
+}
+
+function saveCategory(form) {
+  const fd = new FormData(form);
+  const id = fd.get('catId').trim().toLowerCase();
+  const name = fd.get('catName').trim();
+  const icon = fd.get('catIcon').trim();
+
+  if (!id || !name || !icon) {
+    showToast('Please fill in all fields', 'error');
+    return;
+  }
+
+  // Check if ID already exists
+  if (CATEGORIES.some(c => c.id === id)) {
+    showToast('Category ID already exists', 'error');
+    return;
+  }
+
+  CATEGORIES.push({ id, name, icon });
+  localStorage.setItem('salwa_categories', JSON.stringify(CATEGORIES));
+  
+  state.categoryModalOpen = false;
+  showToast(`Category "${name}" added successfully! 🎉`, 'success');
+  render();
+}
+
+function deleteCategory(catId) {
+  if (catId === 'all') return;
+  const cat = CATEGORIES.find(c => c.id === catId);
+  if (!cat) return;
+
+  // Confirm delete
+  if (!confirm(`Delete category "${cat.name}"? Items under this category will NOT be deleted, but they won't belong to any category.`)) return;
+
+  CATEGORIES = CATEGORIES.filter(c => c.id !== catId);
+  localStorage.setItem('salwa_categories', JSON.stringify(CATEGORIES));
+  showToast(`Category "${cat.name}" deleted`, 'success');
   render();
 }
 
