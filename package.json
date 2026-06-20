@@ -1,0 +1,16 @@
+{
+  "name": "salwa-bakery",
+  "version": "1.0.0",
+  "description": "Salwa's Bakery — Menu & Database System",
+  "scripts": {
+    "start": "npx serve",
+    "dev": "npx serve"
+  },
+  "keywords": [
+    "bakery",
+    "menu",
+    "database"
+  ],
+  "author": "",
+  "license": "ISC"
+}
