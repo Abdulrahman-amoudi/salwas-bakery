@@ -116,7 +116,8 @@ function init() {
   state.cart = storedCart ? JSON.parse(storedCart) : [];
 
   // Check staff login
-  state.isLoggedIn = localStorage.getItem('salwa_logged_in') === 'true';
+  state.isLoggedIn = localStorage.getItem('salwa_logged_in') === 'true' || 
+                     sessionStorage.getItem('salwa_logged_in') === 'true';
 
   // Setup router
   window.addEventListener('hashchange', router);
@@ -285,15 +286,9 @@ function renderLanding() {
             <a href="#track-order" class="btn btn-outline btn-lg">
               ${SVG_ICONS.track} ${t('trackYourOrder')}
             </a>
-            ${state.isLoggedIn ? `
-              <a href="#dashboard" class="btn btn-success btn-sm btn-go-dashboard" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
-                ${SVG_ICONS.orders} ${t('goToDashboard')}
-              </a>
-            ` : `
-              <a href="#staff-login" class="btn btn-outline btn-sm" style="margin-top: 10px; border-color: rgba(26,26,46,0.2); color: var(--text-gray); display: inline-flex; align-items: center; gap: 6px;">
-                ${SVG_ICONS.lock} ${t('staffPortal')}
-              </a>
-            `}
+            <a href="#staff-login" class="btn btn-outline btn-sm" style="margin-top: 10px; border-color: rgba(26,26,46,0.2); color: var(--text-gray); display: inline-flex; align-items: center; gap: 6px;">
+              ${SVG_ICONS.lock} ${t('staffPortal')}
+            </a>
           </div>
           <p class="landing-footer">
             <span>📍 Canada, GTA</span> · 
@@ -491,17 +486,10 @@ function renderNavbar(isStaff = false) {
             ${SVG_ICONS.settings}
             <span>${t('settings')}</span>
           </button>
-          ${state.isLoggedIn ? `
-            <a href="#dashboard" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px; color: var(--success); display: inline-flex; align-items: center; gap: 8px;">
-              ${SVG_ICONS.orders}
-              <span>${t('goToDashboard')}</span>
-            </a>
-          ` : `
-            <a href="#staff-login" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
-              ${SVG_ICONS.lock}
-              <span>${t('staffPortal')}</span>
-            </a>
-          `}
+          <a href="#staff-login" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
+            ${SVG_ICONS.lock}
+            <span>${t('staffPortal')}</span>
+          </a>
         </div>
       </aside>
     </nav>
@@ -652,7 +640,7 @@ function renderCartSidebar() {
 function renderCheckoutModal() {
   return `
     <div class="modal-overlay ${state.checkoutOpen ? 'open' : ''}" data-action="close-checkout">
-      <div class="modal checkout-modal ${state.checkoutOpen ? 'open' : ''}" onclick="event.stopPropagation()">
+      <div class="modal checkout-modal ${state.checkoutOpen ? 'open' : ''}">
         <div class="modal-header">
           <h3>${SVG_ICONS.orders} ${t('checkout')}</h3>
           <button class="btn-close" data-action="close-checkout">&times;</button>
@@ -865,7 +853,7 @@ function renderTrackOrder() {
                     <div class="recent-track-status" style="display: flex; align-items: center; gap: 8px;">
                       <span class="status-badge status-${slugify(o.status)}">${t(slugify(o.status))}</span>
                       <span class="recent-total">${formatCurrency(o.total)}</span>
-                      <button class="btn-remove-track" data-action="remove-track-history" data-id="${o.orderNumber}" title="Remove from history" onclick="event.stopPropagation()">&times;</button>
+                      <button class="btn-remove-track" data-action="remove-track-history" data-id="${o.orderNumber}" title="Remove from history">&times;</button>
                     </div>
                   </div>
                 `;
@@ -955,6 +943,10 @@ function renderStaffLogin() {
           <div class="form-group">
             <label for="loginPass">Password</label>
             <input type="password" id="loginPass" name="password" required placeholder="Password" autocomplete="current-password" />
+          </div>
+          <div class="form-group remember-me-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+            <input type="checkbox" id="loginRemember" name="remember" checked style="width: auto; height: auto; margin: 0; cursor: pointer;" />
+            <label for="loginRemember" style="margin: 0; font-weight: normal; cursor: pointer; font-size: 0.9rem;">Remember this device</label>
           </div>
           <div id="loginError" class="login-error" style="display:none;">
             ${SVG_ICONS.error} Invalid username or password
@@ -1253,7 +1245,7 @@ function renderMenuItemModal() {
 
   return `
     <div class="modal-overlay ${state.menuModalOpen ? 'open' : ''}" data-action="close-menu-modal">
-      <div class="modal menu-modal ${state.menuModalOpen ? 'open' : ''}" onclick="event.stopPropagation()">
+      <div class="modal menu-modal ${state.menuModalOpen ? 'open' : ''}">
         <div class="modal-header">
           <h3>${isEdit ? '✏️ Edit Item' : '➕ Add New Item'}</h3>
           <button class="btn-close" data-action="close-menu-modal">&times;</button>
@@ -1319,6 +1311,11 @@ function renderMenuItemModal() {
 function handleGlobalClick(e) {
   const target = e.target.closest('[data-action]');
   if (!target) return;
+
+  // Ignore modal-overlay triggers if click actually happened inside the modal content
+  if (target.classList.contains('modal-overlay') && e.target !== target) {
+    return;
+  }
 
   const action = target.dataset.action;
 
@@ -1797,10 +1794,15 @@ function staffLogin(form) {
   const fd       = new FormData(form);
   const username = fd.get('username').trim();
   const password = fd.get('password');
+  const remember = form.elements['remember'] ? form.elements['remember'].checked : false;
 
   if (username === STAFF_CREDENTIALS.username && password === STAFF_CREDENTIALS.password) {
     state.isLoggedIn = true;
-    localStorage.setItem('salwa_logged_in', 'true');
+    if (remember) {
+      localStorage.setItem('salwa_logged_in', 'true');
+    } else {
+      sessionStorage.setItem('salwa_logged_in', 'true');
+    }
     showToast('Welcome back!', 'success');
     window.location.hash = '#dashboard';
   } else {
@@ -1820,6 +1822,7 @@ function staffLogin(form) {
 function staffLogout() {
   state.isLoggedIn = false;
   localStorage.removeItem('salwa_logged_in');
+  sessionStorage.removeItem('salwa_logged_in');
   showToast('Logged out successfully', 'success');
   window.location.hash = '#landing';
 }
@@ -2181,7 +2184,7 @@ function renderSettingsModal() {
 
   return `
     <div class="modal-overlay ${state.settingsOpen ? 'open' : ''}" data-action="close-settings">
-      <div class="modal settings-modal ${state.settingsOpen ? 'open' : ''}" onclick="event.stopPropagation()">
+      <div class="modal settings-modal ${state.settingsOpen ? 'open' : ''}">
         <div class="modal-header">
           <div class="modal-title-group">
             <svg class="modal-header-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -2325,7 +2328,7 @@ function saveSettingsForm(form) {
 function renderCategoryModal() {
   return `
     <div class="modal-overlay ${state.categoryModalOpen ? 'open' : ''}" data-action="close-category-modal">
-      <div class="modal category-modal ${state.categoryModalOpen ? 'open' : ''}" onclick="event.stopPropagation()">
+      <div class="modal category-modal ${state.categoryModalOpen ? 'open' : ''}">
         <div class="modal-header">
           <h3>➕ ${t('addCategory') || 'Add New Category'}</h3>
           <button class="btn-close" data-action="close-category-modal">&times;</button>
