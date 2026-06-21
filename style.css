@@ -598,14 +598,15 @@ input, textarea, select { font-family: 'Inter', sans-serif; outline: none; }
   position: absolute;
   top: 14px;
   left: 14px;
-  background: rgba(255,255,255,0.92);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
   padding: 5px 14px;
   border-radius: 50px;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--dark);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .card-body {
@@ -2086,12 +2087,12 @@ body.rtl-layout .btn-close {
   margin-right: auto;
 }
 body.rtl-layout .cart-sidebar {
-  left: -390px;
+  left: -440px;
   right: auto;
   text-align: right;
 }
 body.rtl-layout .cart-sidebar.open {
-  transform: translateX(390px);
+  transform: translateX(440px);
 }
 @media (max-width: 480px) {
   body.rtl-layout .cart-sidebar {
