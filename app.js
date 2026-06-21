@@ -1047,7 +1047,7 @@ function renderOrdersTab() {
   return `
     <div class="dash-section">
       <div class="section-header">
-        <h3>📋 Orders</h3>
+        <h3>${SVG_ICONS.orders} Orders</h3>
         <div class="filter-buttons">
           ${filterStatuses.map(s => `
             <button class="filter-btn ${state.orderFilter === s ? 'active' : ''}"
@@ -1194,7 +1194,7 @@ function renderMenuManageTab() {
   return `
     <div class="dash-section">
       <div class="section-header">
-        <h3>📝 Menu Items</h3>
+        <h3>${SVG_ICONS.notes} Menu Items</h3>
         <button class="btn btn-primary btn-sm" data-action="open-add-menu-item">
           + Add New Item
         </button>
@@ -1279,7 +1279,7 @@ function renderMenuItemModal() {
               <select name="itemCategory" required>
                 ${CATEGORIES.filter(c => c.id !== 'all').map(c => `
                   <option value="${c.id}" ${isEdit && item.category === c.id ? 'selected' : ''}>
-                    ${c.icon} ${c.name}
+                    ${c.icon ? c.icon + ' ' : ''}${c.name}
                   </option>
                 `).join('')}
               </select>
@@ -2264,7 +2264,7 @@ function getCategoryIcon(categoryId) {
   if (SVG_ICONS[categoryId]) {
     return SVG_ICONS[categoryId];
   }
-  return cat ? cat.icon : '✨';
+  return cat ? (cat.icon || '') : '';
 }
 
 /**
@@ -2514,8 +2514,8 @@ function renderCategoryModal() {
             <input type="text" name="catName" required placeholder="Fudgy Brownies" />
           </div>
           <div class="form-group">
-            <label>${t('categoryIcon') || 'Emoji Icon'} * (e.g. 🍫)</label>
-            <input type="text" name="catIcon" required placeholder="🍫" style="font-size: 1.2rem;" />
+            <label>${t('categoryIcon') || 'Emoji Icon'} (Optional, e.g. 🍫)</label>
+            <input type="text" name="catIcon" placeholder="🍫" style="font-size: 1.2rem;" />
           </div>
           <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 16px;">
             ${t('addCategory') || 'Add Category'}
@@ -2532,8 +2532,8 @@ function saveCategory(form) {
   const name = fd.get('catName').trim();
   const icon = fd.get('catIcon').trim();
 
-  if (!id || !name || !icon) {
-    showToast('Please fill in all fields', 'error');
+  if (!id || !name) {
+    showToast('Please fill in Category ID and Category Name', 'error');
     return;
   }
 
