@@ -2023,25 +2023,76 @@ async function syncWithCloudDatabase(forceAllKeys = false) {
         let localStr = '';
         if (key === 'menu') {
           localStr = JSON.stringify(state.menuItems);
-          if (cloudStr !== localStr) {
-            state.menuItems = data.value;
-            localStorage.setItem('salwa_menu', cloudStr);
+          
+          // Merge local and cloud items to prevent losing offline changes
+          const cloudItems = data.value;
+          const localItems = state.menuItems;
+          let merged = [...cloudItems];
+          let localAdded = false;
+          for (const localItem of localItems) {
+            if (!merged.some(item => item.id === localItem.id)) {
+              merged.push(localItem);
+              localAdded = true;
+            }
+          }
+          
+          const mergedStr = JSON.stringify(merged);
+          if (mergedStr !== cloudStr || mergedStr !== localStr) {
+            state.menuItems = merged;
+            localStorage.setItem('salwa_menu', mergedStr);
             hasChanges = true;
+            if (localAdded) {
+              await uploadToCloud('menu');
+            }
           }
         } else if (key === 'categories') {
           localStr = JSON.stringify(CATEGORIES);
-          if (cloudStr !== localStr) {
-            CATEGORIES = data.value;
-            localStorage.setItem('salwa_categories', cloudStr);
+          
+          // Merge local and cloud categories
+          const cloudCats = data.value;
+          const localCats = CATEGORIES;
+          let merged = [...cloudCats];
+          let localAdded = false;
+          for (const localCat of localCats) {
+            if (!merged.some(cat => cat.id === localCat.id)) {
+              merged.push(localCat);
+              localAdded = true;
+            }
+          }
+          
+          const mergedStr = JSON.stringify(merged);
+          if (mergedStr !== cloudStr || mergedStr !== localStr) {
+            CATEGORIES = merged;
+            localStorage.setItem('salwa_categories', mergedStr);
             hasChanges = true;
+            if (localAdded) {
+              await uploadToCloud('categories');
+            }
           }
         } else if (key === 'orders') {
           localStr = JSON.stringify(state.orders);
-          if (cloudStr !== localStr) {
+          
+          // Merge local and cloud orders
+          const cloudOrders = data.value;
+          const localOrders = state.orders;
+          let merged = [...cloudOrders];
+          let localAdded = false;
+          for (const localOrder of localOrders) {
+            if (!merged.some(order => order.orderNumber === localOrder.orderNumber)) {
+              merged.push(localOrder);
+              localAdded = true;
+            }
+          }
+          
+          const mergedStr = JSON.stringify(merged);
+          if (mergedStr !== cloudStr || mergedStr !== localStr) {
             const oldLength = state.orders.length;
-            state.orders = data.value;
-            localStorage.setItem('salwa_orders', cloudStr);
+            state.orders = merged;
+            localStorage.setItem('salwa_orders', mergedStr);
             hasChanges = true;
+            if (localAdded) {
+              await uploadToCloud('orders');
+            }
             
             // Check for new orders if logged in on dashboard
             if (state.isLoggedIn && state.currentView === 'dashboard' && state.orders.length > oldLength) {
