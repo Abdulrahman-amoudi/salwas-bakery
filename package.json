@@ -6,6 +6,9 @@
     "start": "npx serve",
     "dev": "npx serve"
   },
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
   "keywords": [
     "bakery",
     "menu",

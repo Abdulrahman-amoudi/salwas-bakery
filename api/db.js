@@ -1,5 +1,20 @@
 // api/db.js
-// Vercel serverless function to sync menu, categories, and orders with Vercel KV (Redis).
+// Vercel serverless function to sync menu, categories, and orders with PostgreSQL.
+import pg from 'pg';
+const { Pool } = pg;
+
+// Define pool outside handler to reuse connection across warm functions
+const pgUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+let pool = null;
+
+if (pgUrl) {
+  pool = new Pool({
+    connectionString: pgUrl,
+    ssl: {
+      rejectUnauthorized: false // Required for serverless database connections (e.g. Neon)
+    }
+  });
+}
 
 export default async function handler(request, response) {
   // CORS Headers
@@ -19,12 +34,9 @@ export default async function handler(request, response) {
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
   const key = url.searchParams.get('key');
 
-  const kvUrl = process.env.KV_REST_API_URL;
-  const kvToken = process.env.KV_REST_API_TOKEN;
-
-  if (!kvUrl || !kvToken) {
+  if (!pgUrl || !pool) {
     return response.status(500).json({ 
-      error: 'Vercel KV is not configured. Please link a KV database to your project in the Vercel dashboard.' 
+      error: 'PostgreSQL database is not configured. Please link a Postgres database (such as Neon or Vercel Postgres) in the Vercel dashboard.' 
     });
   }
 
@@ -34,22 +46,27 @@ export default async function handler(request, response) {
   }
 
   try {
+    // Ensure the key-value table exists
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS salwa_kv (
+        key VARCHAR(255) PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+    `);
+
     if (method === 'GET') {
-      const res = await fetch(`${kvUrl}/get/salwa_${key}`, {
-        headers: { Authorization: `Bearer ${kvToken}` }
-      });
-      const data = await res.json();
+      const res = await pool.query('SELECT value FROM salwa_kv WHERE key = $1', [key]);
       let value = null;
-      if (data && data.result) {
+      if (res.rows.length > 0) {
         try {
-          value = JSON.parse(data.result);
-          // Auto-heal double JSON serialization from legacy code
+          value = JSON.parse(res.rows[0].value);
+          // Auto-heal double JSON serialization from legacy code if present
           if (typeof value === 'string') {
             value = JSON.parse(value);
           }
         } catch (e) {
-          console.warn("Failed parsing JSON result from KV, returning raw result:", e);
-          value = data.result;
+          console.warn("Failed parsing JSON result from Postgres, returning raw result:", e);
+          value = res.rows[0].value;
         }
       }
       return response.status(200).json({ value });
@@ -73,22 +90,20 @@ export default async function handler(request, response) {
         return response.status(400).json({ error: 'Body must be valid JSON' });
       }
 
-      // Save directly as single JSON string (without double-stringifying it)
-      const res = await fetch(`${kvUrl}/set/salwa_${key}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${kvToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: body
-      });
+      // Save directly as single JSON string in PostgreSQL key-value store
+      await pool.query(`
+        INSERT INTO salwa_kv (key, value)
+        VALUES ($1, $2)
+        ON CONFLICT (key)
+        DO UPDATE SET value = $2
+      `, [key, body]);
 
-      const result = await res.json();
-      return response.status(200).json({ success: true, result });
+      return response.status(200).json({ success: true });
     }
 
     return response.status(405).json({ error: 'Method Not Allowed' });
   } catch (err) {
+    console.error("Database handler error:", err);
     return response.status(500).json({ error: err.message });
   }
 }
