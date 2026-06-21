@@ -2015,7 +2015,15 @@ async function syncWithCloudDatabase(forceAllKeys = false) {
   for (const key of keys) {
     try {
       const res = await fetch(`/api/db?key=${key}`);
-      if (!res.ok) continue;
+      if (!res.ok) {
+        const errText = await res.text();
+        let errMsg = `Server returned status ${res.status}`;
+        try {
+          const errData = JSON.parse(errText);
+          if (errData && errData.error) errMsg = errData.error;
+        } catch (parseErr) {}
+        throw new Error(errMsg);
+      }
       const data = await res.json();
       
       if (data && data.value) {
@@ -2107,6 +2115,11 @@ async function syncWithCloudDatabase(forceAllKeys = false) {
       }
     } catch (e) {
       console.warn(`Cloud sync failed for ${key}, using local data:`, e);
+      if (!state.dbErrorShown) {
+        showToast(`Sync error: ${e.message}`, 'error');
+        state.dbErrorShown = true;
+        setTimeout(() => { state.dbErrorShown = false; }, 20000);
+      }
     }
   }
   
