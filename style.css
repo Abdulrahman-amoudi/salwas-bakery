@@ -2663,4 +2663,41 @@ body.rtl-layout .btn-remove-track {
   margin-right: auto;
 }
 
+.location-suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1500;
+  background: var(--white);
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  max-height: 180px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+.suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--gray-light);
+  text-align: left;
+  transition: var(--transition);
+}
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+.suggestion-item:hover {
+  background: var(--pink-lightest);
+  color: var(--pink-primary);
+}
+body.rtl-layout .suggestion-item {
+  text-align: right;
+}
+.location-map-preview-container {
+  display: block;
+}
+
 

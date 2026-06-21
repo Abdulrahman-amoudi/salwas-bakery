@@ -247,7 +247,7 @@ function renderLanding() {
         <div class="glass-card landing-card">
           <img src="assets/logo.png" alt="Salwa's Bakery Logo" class="landing-logo" />
           <h1 class="landing-title">Salwa's Bakery</h1>
-          <p class="landing-subtitle">${state.language === 'ar' ? 'صنع بكل حب · كندا، تورنتو' : (state.language === 'fr' ? 'Fait à la main avec amour · Canada, GTA' : 'Handcrafted with Love · Canada, GTA')}</p>
+          <p class="landing-subtitle">${state.language === 'ar' ? 'صنع بكل حب · كندا، GTA' : (state.language === 'fr' ? 'Fait à la main avec amour · Canada, GTA' : 'Handcrafted with Love · Canada, GTA')}</p>
           <div class="landing-buttons">
             <a href="#menu" class="btn btn-primary btn-lg">
               <span>🧁</span> ${t('browseMenu')}
@@ -587,7 +587,23 @@ function renderCheckoutModal() {
           </div>
           <div class="form-group">
             <label for="custLocation">${t('location')} *</label>
-            <input type="text" id="custLocation" name="location" required placeholder="${t('locationPlaceholder')}" />
+            <div class="input-with-icon" style="position: relative; display: flex; align-items: center;">
+              <input type="text" id="custLocation" name="location" required placeholder="${t('locationPlaceholder')}" autocomplete="off" style="padding-right: 36px; width: 100%;" />
+              <span class="location-search-icon" style="position: absolute; right: 12px; color: var(--text-light); cursor: pointer;">🔍</span>
+            </div>
+            <!-- Autocomplete suggestions dropdown -->
+            <div id="locationSuggestions" class="location-suggestions-dropdown" style="display: none;"></div>
+            <!-- Map preview container -->
+            <div id="locationMapPreview" class="location-map-preview-container" style="display: none; margin-top: 12px; overflow: hidden; border-radius: 12px; border: 1px solid var(--gray-border); box-shadow: var(--shadow-sm);">
+              <div id="checkoutMap" style="height: 180px; width: 100%;"></div>
+              <div id="locationMetaInfo" style="padding: 12px; background: var(--white); border-top: 1px solid var(--gray-border); display: flex; align-items: center; gap: 12px;">
+                <img id="locationMetaPic" src="assets/logo.png" alt="Location preview" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;" />
+                <div>
+                  <h5 id="locationMetaTitle" style="margin: 0; font-family: var(--font-family); color: var(--text-dark); font-size: 0.9rem;">Toronto, Canada</h5>
+                  <p id="locationMetaDesc" class="text-muted" style="margin: 0; font-size: 0.75rem;">Selected location</p>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="orderNotes">${t('specialNotes')}</label>
@@ -1120,8 +1136,17 @@ function renderMenuItemModal() {
             </div>
           </div>
           <div class="form-group">
-            <label>Image Path</label>
-            <input type="text" name="itemImage" placeholder="assets/cake.png" value="${isEdit ? escapeHtml(item.image) : 'assets/cake.png'}" />
+            <label>Upload Image *</label>
+            <div style="display: flex; gap: 12px; align-items: center; margin-top: 6px;">
+              <label class="btn btn-outline btn-sm" style="margin: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                📸 Choose Image File
+                <input type="file" id="itemImageFile" accept="image/*" style="display: none;" />
+              </label>
+              <input type="hidden" name="itemImage" id="itemImageBase64" value="${isEdit ? escapeHtml(item.image) : 'assets/cake.png'}" />
+              <div id="itemImagePreviewContainer" style="width: 48px; height: 48px; border-radius: 8px; border: 1px solid var(--gray-border); overflow: hidden; background: var(--gray-light); display: flex; align-items: center; justify-content: center;">
+                <img id="itemImagePreview" src="${isEdit ? item.image : 'assets/cake.png'}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />
+              </div>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary btn-block">
             ${isEdit ? 'Save Changes' : 'Add Item'}
@@ -1185,6 +1210,61 @@ function handleGlobalClick(e) {
     case 'switch-dash-tab':
       switchDashTab(target.dataset.tab);
       break;
+
+    case 'select-location': {
+      const lat = parseFloat(target.dataset.lat);
+      const lon = parseFloat(target.dataset.lon);
+      const name = target.dataset.display;
+      
+      const input = document.getElementById('custLocation');
+      if (input) input.value = name;
+      
+      const suggestionsDiv = document.getElementById('locationSuggestions');
+      if (suggestionsDiv) suggestionsDiv.style.display = 'none';
+      
+      const previewContainer = document.getElementById('locationMapPreview');
+      if (previewContainer) previewContainer.style.display = 'block';
+      
+      // Initialize Leaflet map
+      setTimeout(() => {
+        try {
+          if (window.checkoutLMap) {
+            window.checkoutLMap.setView([lat, lon], 15);
+            if (window.checkoutLMarker) {
+              window.checkoutLMarker.setLatLng([lat, lon]);
+            } else {
+              window.checkoutLMarker = L.marker([lat, lon]).addTo(window.checkoutLMap);
+            }
+          } else {
+            window.checkoutLMap = L.map('checkoutMap').setView([lat, lon], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(window.checkoutLMap);
+            window.checkoutLMarker = L.marker([lat, lon]).addTo(window.checkoutLMap);
+          }
+          
+          // Update preview info card
+          const picEl = document.getElementById('locationMetaPic');
+          const titleEl = document.getElementById('locationMetaTitle');
+          const descEl = document.getElementById('locationMetaDesc');
+          
+          if (titleEl) titleEl.textContent = name.split(',')[0] || name;
+          if (descEl) descEl.textContent = name;
+          if (picEl) {
+            if (name.toLowerCase().includes("pickup")) {
+              picEl.src = "assets/logo.png";
+            } else {
+              picEl.src = "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=80&h=80&q=80";
+            }
+          }
+          
+          window.checkoutLMap.invalidateSize();
+        } catch (e) {
+          console.error("Leaflet init error:", e);
+        }
+      }, 100);
+      break;
+    }
 
     case 'delete-order': {
       const orderId = target.dataset.id;
@@ -1305,6 +1385,23 @@ function handleGlobalSubmit(e) {
  * Handle status dropdown changes in the orders table.
  */
 function handleGlobalChange(e) {
+  if (e.target.id === 'itemImageFile') {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const base64 = evt.target.result;
+        const hiddenInput = document.getElementById('itemImageBase64');
+        const imgPreview = document.getElementById('itemImagePreview');
+        if (hiddenInput) hiddenInput.value = base64;
+        if (imgPreview) imgPreview.src = base64;
+        showToast('Image loaded successfully! 📸', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+    return;
+  }
+
   const target = e.target.closest('[data-action="update-order-status"]');
   if (!target) return;
   updateOrderStatus(target.dataset.orderId, target.value);
@@ -1319,6 +1416,75 @@ function handleGlobalInput(e) {
     // Debounced re-render for the menu grid only
     clearTimeout(state._searchTimer);
     state._searchTimer = setTimeout(() => render(), 200);
+  }
+  
+  if (e.target.id === 'custLocation') {
+    const query = e.target.value.trim();
+    const suggestionsDiv = document.getElementById('locationSuggestions');
+    if (!suggestionsDiv) return;
+    
+    if (query.length < 3) {
+      suggestionsDiv.style.display = 'none';
+      return;
+    }
+    
+    clearTimeout(state._locationTimer);
+    state._locationTimer = setTimeout(() => {
+      const MOCK_LOCATIONS = [
+        { display_name: "Salwa's Bakery (Pickup) - Canada, GTA", lat: 43.6532, lon: -79.3832 },
+        { display_name: "123 Main St, Toronto, ON, Canada", lat: 43.6841, lon: -79.3105 },
+        { display_name: "456 Yonge St, Toronto, ON, Canada", lat: 43.6617, lon: -79.3852 },
+        { display_name: "789 Queen St W, Toronto, ON, Canada", lat: 43.6456, lon: -79.4024 },
+        { display_name: "100 Baker St, North York, ON, Canada", lat: 43.7615, lon: -79.4110 },
+        { display_name: "10 Bay St, Toronto, ON, Canada", lat: 43.6410, lon: -79.3785 }
+      ];
+      
+      const localFiltered = MOCK_LOCATIONS.filter(loc => 
+        loc.display_name.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
+        .then(res => res.json())
+        .then(data => {
+          const combined = [...localFiltered];
+          data.forEach(item => {
+            if (!combined.some(c => c.display_name === item.display_name)) {
+              combined.push({
+                display_name: item.display_name,
+                lat: parseFloat(item.lat),
+                lon: parseFloat(item.lon)
+              });
+            }
+          });
+          
+          if (combined.length === 0) {
+            suggestionsDiv.innerHTML = '<div class="suggestion-item text-muted" style="padding: 10px;">No locations found</div>';
+          } else {
+            suggestionsDiv.innerHTML = combined.map(item => `
+              <div class="suggestion-item" data-action="select-location" 
+                   data-lat="${item.lat}" data-lon="${item.lon}" 
+                   data-display="${escapeHtml(item.display_name)}">
+                📍 ${escapeHtml(item.display_name)}
+              </div>
+            `).join('');
+          }
+          suggestionsDiv.style.display = 'block';
+        })
+        .catch(err => {
+          if (localFiltered.length > 0) {
+            suggestionsDiv.innerHTML = localFiltered.map(item => `
+              <div class="suggestion-item" data-action="select-location" 
+                   data-lat="${item.lat}" data-lon="${item.lon}" 
+                   data-display="${escapeHtml(item.display_name)}">
+                📍 ${escapeHtml(item.display_name)}
+              </div>
+            `).join('');
+            suggestionsDiv.style.display = 'block';
+          } else {
+            suggestionsDiv.style.display = 'none';
+          }
+        });
+    }, 300);
   }
 }
 
@@ -1394,6 +1560,15 @@ function openCheckout() {
 
 function closeCheckout() {
   state.checkoutOpen = false;
+  if (window.checkoutLMap) {
+    try {
+      window.checkoutLMap.remove();
+    } catch (e) {
+      console.error(e);
+    }
+    window.checkoutLMap = null;
+    window.checkoutLMarker = null;
+  }
   render();
 }
 

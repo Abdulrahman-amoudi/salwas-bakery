@@ -348,7 +348,7 @@ const TRANSLATIONS = {
     preparing: 'قيد التحضير',
     completed: 'مكتمل',
     location: 'العنوان أو "استلام من المتجر"',
-    locationPlaceholder: 'مثال: استلام من المتجر، أو 123 الشارع الرئيسي، تورونتو',
+    locationPlaceholder: 'مثال: استلام من المتجر، أو 123 الشارع الرئيسي، كندا',
     addedSuccess: 'تمت الإضافة! ✓',
     categories: 'الفئات',
     addCategory: 'إضافة فئة',
