@@ -133,6 +133,12 @@ function init() {
 
   // Route to current hash or default
   router();
+
+  // Trigger cloud sync immediately
+  syncWithCloudDatabase(true);
+
+  // Periodically sync with cloud database every 20 seconds
+  setInterval(() => syncWithCloudDatabase(false), 20000);
 }
 
 function handleStorageChange(e) {
@@ -663,7 +669,7 @@ function renderCheckoutModal() {
             <!-- Autocomplete suggestions dropdown -->
             <div id="locationSuggestions" class="location-suggestions-dropdown" style="display: none;"></div>
             <!-- Map preview container -->
-            <div id="locationMapPreview" class="location-map-preview-container" style="display: none; margin-top: 12px; overflow: hidden; border-radius: 12px; border: 1px solid var(--gray-border); box-shadow: var(--shadow-sm);">
+            <div id="locationMapPreview" class="location-map-preview-container" style="display: block; margin-top: 12px; overflow: hidden; border-radius: 12px; border: 1px solid var(--gray-border); box-shadow: var(--shadow-sm);">
               <div id="checkoutMap" style="height: 180px; width: 100%;"></div>
               <div id="locationMetaInfo" style="padding: 12px; background: var(--white); border-top: 1px solid var(--gray-border); display: flex; align-items: center; gap: 12px;">
                 <img id="locationMetaPic" src="assets/logo.png" alt="Location preview" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;" />
@@ -910,7 +916,10 @@ function trackOrderSubmit(form) {
   const orderNumber = fd.get('orderNumber').trim().toUpperCase();
   if (orderNumber) {
     state.trackedOrderId = orderNumber;
-    render();
+    saveCustomerOrder(orderNumber);
+    syncWithCloudDatabase(true).then(() => {
+      render();
+    });
   }
 }
 
@@ -1202,8 +1211,8 @@ function renderMenuManageTab() {
               <span class="card-category-tag">${getCategoryIcon(item.category)} ${capitalize(item.category)}</span>
             </div>
             <div class="manage-card-actions">
-              <button class="btn btn-outline btn-sm" data-action="edit-menu-item" data-id="${item.id}">✏️ Edit</button>
-              <button class="btn btn-danger btn-sm" data-action="delete-menu-item" data-id="${item.id}">🗑️ Delete</button>
+              <button class="btn btn-outline btn-sm" data-action="edit-menu-item" data-id="${item.id}">Edit</button>
+              <button class="btn btn-danger btn-sm" data-action="delete-menu-item" data-id="${item.id}">${SVG_ICONS.trash} Delete</button>
             </div>
           </div>
         `).join('')}
@@ -1228,7 +1237,7 @@ function renderMenuManageTab() {
                 <p class="text-muted" style="margin:0; font-size:0.8rem;">ID: ${escapeHtml(cat.id)}</p>
               </div>
             </div>
-            <button class="btn btn-danger btn-sm" data-action="delete-category" data-id="${cat.id}">🗑️ Delete</button>
+            <button class="btn btn-danger btn-sm" data-action="delete-category" data-id="${cat.id}">${SVG_ICONS.trash} Delete</button>
           </div>
         `).join('')}
       </div>
@@ -1247,7 +1256,7 @@ function renderMenuItemModal() {
     <div class="modal-overlay ${state.menuModalOpen ? 'open' : ''}" data-action="close-menu-modal">
       <div class="modal menu-modal ${state.menuModalOpen ? 'open' : ''}">
         <div class="modal-header">
-          <h3>${isEdit ? '✏️ Edit Item' : '➕ Add New Item'}</h3>
+          <h3>${isEdit ? 'Edit Item' : 'Add New Item'}</h3>
           <button class="btn-close" data-action="close-menu-modal">&times;</button>
         </div>
         <form id="menuItemForm" data-form="menu-item">
@@ -1280,7 +1289,7 @@ function renderMenuItemModal() {
             <label>Upload Image *</label>
             <div style="display: flex; gap: 12px; align-items: center; margin-top: 6px;">
               <label class="btn btn-outline btn-sm" style="margin: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-                📸 Choose Image File
+                Choose Image File
                 <input type="file" id="itemImageFile" accept="image/*" style="display: none;" />
               </label>
               <input type="hidden" name="itemImage" id="itemImageBase64" value="${isEdit ? escapeHtml(item.image) : 'assets/cake.png'}" />
@@ -1368,47 +1377,7 @@ function handleGlobalClick(e) {
       const suggestionsDiv = document.getElementById('locationSuggestions');
       if (suggestionsDiv) suggestionsDiv.style.display = 'none';
       
-      const previewContainer = document.getElementById('locationMapPreview');
-      if (previewContainer) previewContainer.style.display = 'block';
-      
-      // Initialize Leaflet map
-      setTimeout(() => {
-        try {
-          if (window.checkoutLMap) {
-            window.checkoutLMap.setView([lat, lon], 15);
-            if (window.checkoutLMarker) {
-              window.checkoutLMarker.setLatLng([lat, lon]);
-            } else {
-              window.checkoutLMarker = L.marker([lat, lon]).addTo(window.checkoutLMap);
-            }
-          } else {
-            window.checkoutLMap = L.map('checkoutMap').setView([lat, lon], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(window.checkoutLMap);
-            window.checkoutLMarker = L.marker([lat, lon]).addTo(window.checkoutLMap);
-          }
-          
-          // Update preview info card
-          const picEl = document.getElementById('locationMetaPic');
-          const titleEl = document.getElementById('locationMetaTitle');
-          const descEl = document.getElementById('locationMetaDesc');
-          
-          if (titleEl) titleEl.textContent = name.split(',')[0] || name;
-          if (descEl) descEl.textContent = name;
-          if (picEl) {
-            if (name.toLowerCase().includes("pickup")) {
-              picEl.src = "assets/logo.png";
-            } else {
-              picEl.src = "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=80&h=80&q=80";
-            }
-          }
-          
-          window.checkoutLMap.invalidateSize();
-        } catch (e) {
-          console.error("Leaflet init error:", e);
-        }
-      }, 100);
+      initCheckoutMap(lat, lon, name);
       break;
     }
 
@@ -1694,6 +1663,57 @@ function toggleCart() {
   render();
 }
 
+function initCheckoutMap(lat = 43.6532, lon = -79.3832, name = "Toronto, GTA") {
+  const previewContainer = document.getElementById('locationMapPreview');
+  if (previewContainer) previewContainer.style.display = 'block';
+
+  setTimeout(() => {
+    try {
+      const mapEl = document.getElementById('checkoutMap');
+      if (!mapEl) return;
+
+      const leafIcon = L.icon({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      if (window.checkoutLMap) {
+        window.checkoutLMap.setView([lat, lon], 13);
+        if (window.checkoutLMarker) {
+          window.checkoutLMarker.setLatLng([lat, lon]);
+        } else {
+          window.checkoutLMarker = L.marker([lat, lon], { icon: leafIcon }).addTo(window.checkoutLMap);
+        }
+      } else {
+        window.checkoutLMap = L.map('checkoutMap').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(window.checkoutLMap);
+        window.checkoutLMarker = L.marker([lat, lon], { icon: leafIcon }).addTo(window.checkoutLMap);
+      }
+
+      // Update preview info card
+      const picEl = document.getElementById('locationMetaPic');
+      const titleEl = document.getElementById('locationMetaTitle');
+      const descEl = document.getElementById('locationMetaDesc');
+
+      if (titleEl) titleEl.textContent = name.split(',')[0] || name;
+      if (descEl) descEl.textContent = name;
+      if (picEl) {
+        picEl.src = "assets/logo.png";
+      }
+
+      window.checkoutLMap.invalidateSize();
+    } catch (e) {
+      console.error("Leaflet init error:", e);
+    }
+  }, 100);
+}
+
 function openCheckout() {
   if (state.cart.length === 0) {
     showToast('Your cart is empty!', 'error');
@@ -1702,6 +1722,7 @@ function openCheckout() {
   state.cartOpen = false;
   state.checkoutOpen = true;
   render();
+  initCheckoutMap();
 }
 
 function closeCheckout() {
@@ -1805,6 +1826,7 @@ function staffLogin(form) {
     }
     showToast('Welcome back!', 'success');
     window.location.hash = '#dashboard';
+    syncWithCloudDatabase(true);
   } else {
     // Show error with shake
     const errorDiv = document.getElementById('loginError');
@@ -1928,8 +1950,13 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
+  
+  const icon = type === 'success' 
+    ? `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--success);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+    : `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--warning);"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+
   toast.innerHTML = `
-    <span class="toast-icon">${type === 'success' ? '✅' : '⚠️'}</span>
+    <span class="toast-icon">${icon}</span>
     <span class="toast-msg">${message}</span>
   `;
 
@@ -1951,12 +1978,105 @@ function showToast(message, type = 'success') {
 // ║  PERSISTENCE HELPERS                                      ║
 // ╚════════════════════════════════════════════════════════════╝
 
+async function uploadToCloud(key) {
+  let localData = null;
+  if (key === 'menu') localData = state.menuItems;
+  else if (key === 'categories') localData = CATEGORIES;
+  else if (key === 'orders') localData = state.orders;
+  
+  if (!localData) return;
+  try {
+    await fetch(`/api/db?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(localData)
+    });
+  } catch (e) {
+    console.warn(`Failed to upload ${key} to cloud database:`, e);
+  }
+}
+
+async function syncWithCloudDatabase(forceAllKeys = false) {
+  if (document.visibilityState !== 'visible') return;
+
+  // Optimize KV request count:
+  // If not forcing all keys, only poll if logged in (staff dashboard) or tracking an order.
+  if (!forceAllKeys) {
+    if (!state.isLoggedIn && !state.trackedOrderId) {
+      return;
+    }
+  }
+
+  // Customers only pull 'orders' to get status updates for their tracked order.
+  // Staff dashboard pulls all keys to stay fully synchronized.
+  const keys = (forceAllKeys || state.isLoggedIn) ? ['menu', 'categories', 'orders'] : ['orders'];
+  let hasChanges = false;
+  
+  for (const key of keys) {
+    try {
+      const res = await fetch(`/api/db?key=${key}`);
+      if (!res.ok) continue;
+      const data = await res.json();
+      
+      if (data && data.value) {
+        const cloudStr = JSON.stringify(data.value);
+        let localStr = '';
+        if (key === 'menu') {
+          localStr = JSON.stringify(state.menuItems);
+          if (cloudStr !== localStr) {
+            state.menuItems = data.value;
+            localStorage.setItem('salwa_menu', cloudStr);
+            hasChanges = true;
+          }
+        } else if (key === 'categories') {
+          localStr = JSON.stringify(CATEGORIES);
+          if (cloudStr !== localStr) {
+            CATEGORIES = data.value;
+            localStorage.setItem('salwa_categories', cloudStr);
+            hasChanges = true;
+          }
+        } else if (key === 'orders') {
+          localStr = JSON.stringify(state.orders);
+          if (cloudStr !== localStr) {
+            const oldLength = state.orders.length;
+            state.orders = data.value;
+            localStorage.setItem('salwa_orders', cloudStr);
+            hasChanges = true;
+            
+            // Check for new orders if logged in on dashboard
+            if (state.isLoggedIn && state.currentView === 'dashboard' && state.orders.length > oldLength) {
+              playNewOrderChime();
+              showToast('New order received!', 'success');
+            }
+          }
+        }
+      } else {
+        // If cloud database has no data, upload local data to populate it
+        await uploadToCloud(key);
+      }
+    } catch (e) {
+      console.warn(`Cloud sync failed for ${key}, using local data:`, e);
+    }
+  }
+  
+  if (hasChanges) {
+    render();
+  }
+}
+
 function saveOrders() {
   localStorage.setItem('salwa_orders', JSON.stringify(state.orders));
+  uploadToCloud('orders');
 }
 
 function saveMenu() {
   localStorage.setItem('salwa_menu', JSON.stringify(state.menuItems));
+  uploadToCloud('menu');
+}
+
+function saveCategories() {
+  localStorage.setItem('salwa_categories', JSON.stringify(CATEGORIES));
+  uploadToCloud('categories');
 }
 
 function saveCart() {
@@ -2321,7 +2441,7 @@ function saveSettingsForm(form) {
   applySettings();
   
   state.settingsOpen = false;
-  showToast('Settings saved successfully! ⚙️', 'success');
+  showToast('Settings saved successfully!', 'success');
   render();
 }
 
@@ -2330,7 +2450,7 @@ function renderCategoryModal() {
     <div class="modal-overlay ${state.categoryModalOpen ? 'open' : ''}" data-action="close-category-modal">
       <div class="modal category-modal ${state.categoryModalOpen ? 'open' : ''}">
         <div class="modal-header">
-          <h3>➕ ${t('addCategory') || 'Add New Category'}</h3>
+          <h3>${t('addCategory') || 'Add New Category'}</h3>
           <button class="btn-close" data-action="close-category-modal">&times;</button>
         </div>
         <form id="categoryForm" data-form="category">
@@ -2347,7 +2467,7 @@ function renderCategoryModal() {
             <input type="text" name="catIcon" required placeholder="🍫" style="font-size: 1.2rem;" />
           </div>
           <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 16px;">
-            🎉 ${t('addCategory') || 'Add Category'}
+            ${t('addCategory') || 'Add Category'}
           </button>
         </form>
       </div>
@@ -2373,10 +2493,10 @@ function saveCategory(form) {
   }
 
   CATEGORIES.push({ id, name, icon });
-  localStorage.setItem('salwa_categories', JSON.stringify(CATEGORIES));
+  saveCategories();
   
   state.categoryModalOpen = false;
-  showToast(`Category "${name}" added successfully! 🎉`, 'success');
+  showToast(`Category "${name}" added successfully!`, 'success');
   render();
 }
 
@@ -2389,7 +2509,7 @@ function deleteCategory(catId) {
   if (!confirm(`Delete category "${cat.name}"? Items under this category will NOT be deleted, but they won't belong to any category.`)) return;
 
   CATEGORIES = CATEGORIES.filter(c => c.id !== catId);
-  localStorage.setItem('salwa_categories', JSON.stringify(CATEGORIES));
+  saveCategories();
   showToast(`Category "${cat.name}" deleted`, 'success');
   render();
 }
