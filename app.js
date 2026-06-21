@@ -43,6 +43,31 @@ const state = {
 
 window.state = state;
 
+const SVG_ICONS = {
+  all: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg>`,
+  cakes: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v3c0 1.1.9 2 2 2zM12 5V2m-3 0h6M2 17c0 2.2 4 4 10 4s10-1.8 10-4m-20-7v7c0 2.2 4 4 10 4s10-1.8 10-4v-7"/></svg>`,
+  cupcakes: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14H18L19.5 21H4.5L6 14ZM12 11c2.5 0 4-1.5 4-3s-1.5-3-4-3-4 1.5-4 3 1.5 3 4 3ZM12 5V2m-2.5.5A1.5 1.5 0 1 1 12 2"/></svg>`,
+  cookies: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10c0-1-1.5-1.5-2.5-1.5S17 10 17 8.5s-.5-2.5-1.5-2.5S14 4.5 14 3.5s-.5-1.5-2-1.5zM7.5 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm6 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-5 2.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8.5-3a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>`,
+  pastries: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-9 9l3 6 4-3 2 4 2-4 4 3 3-6a9 9 0 0 0-9-9zM6 12h12"/></svg>`,
+  custom: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12m16-4H4c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2zM12 22V8m0 0a4 4 0 0 0 4-4c0-2-2-3-4-1m0 5a4 4 0 0 1-4-4c0-2 2-3 4-1"/></svg>`,
+  orders: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+  pending: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+  completed: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+  revenue: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
+  items: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+  browseMenu: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+  track: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="2" x2="15" y2="9"></line><line x1="22" y1="2" x2="11" y2="2"></line><line x1="22" y1="2" x2="22" y2="13"></line></svg>`,
+  lock: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`,
+  logout: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>`,
+  settings: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
+  search: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
+  location: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+  notes: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+  print: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>`,
+  trash: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`,
+  phone: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`
+};
+
 
 // ╔════════════════════════════════════════════════════════════╗
 // ║  INITIALISATION                                           ║
@@ -250,14 +275,20 @@ function renderLanding() {
           <p class="landing-subtitle">${state.language === 'ar' ? 'صنع بكل حب · كندا، GTA' : (state.language === 'fr' ? 'Fait à la main avec amour · Canada, GTA' : 'Handcrafted with Love · Canada, GTA')}</p>
           <div class="landing-buttons">
             <a href="#menu" class="btn btn-primary btn-lg">
-              <span>🧁</span> ${t('browseMenu')}
+              ${SVG_ICONS.browseMenu} ${t('browseMenu')}
             </a>
             <a href="#track-order" class="btn btn-outline btn-lg">
-              <span>🔍</span> ${t('trackYourOrder')}
+              ${SVG_ICONS.track} ${t('trackYourOrder')}
             </a>
-            <a href="#staff-login" class="btn btn-outline btn-sm" style="margin-top: 10px; border-color: rgba(26,26,46,0.2); color: var(--text-gray);">
-              <span>🔐</span> ${t('staffPortal')}
-            </a>
+            ${state.isLoggedIn ? `
+              <a href="#dashboard" class="btn btn-success btn-sm btn-go-dashboard" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 8px;">
+                ${SVG_ICONS.orders} ${t('goToDashboard')}
+              </a>
+            ` : `
+              <a href="#staff-login" class="btn btn-outline btn-sm" style="margin-top: 10px; border-color: rgba(26,26,46,0.2); color: var(--text-gray); display: inline-flex; align-items: center; gap: 6px;">
+                ${SVG_ICONS.lock} ${t('staffPortal')}
+              </a>
+            `}
           </div>
           <p class="landing-footer">
             <span>📍 Canada, GTA</span> · 
@@ -281,6 +312,11 @@ function renderLanding() {
 
 function renderNavbar(isStaff = false) {
   if (isStaff) {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayOrders   = state.orders.filter(o => o.createdAt && o.createdAt.slice(0, 10) === todayStr);
+    const pendingOrders = state.orders.filter(o => o.status === 'Pending');
+    const revenueToday  = todayOrders.reduce((s, o) => s + (o.total || 0), 0);
+
     return `
       <nav class="navbar navbar-staff animate-fade-in">
         <!-- Mobile Burger Toggle (only visible on mobile) -->
@@ -301,21 +337,24 @@ function renderNavbar(isStaff = false) {
         <div class="navbar-links desktop-only">
           <button class="nav-tab ${state.dashboardTab === 'orders' ? 'active' : ''}"
                   data-action="switch-dash-tab" data-tab="orders">
-            📋 ${t('ordersToday')}
+            ${SVG_ICONS.orders} ${t('ordersToday')}
           </button>
           <button class="nav-tab ${state.dashboardTab === 'menu-manage' ? 'active' : ''}"
                   data-action="switch-dash-tab" data-tab="menu-manage">
-            📝 ${t('menuItems')}
+            ${SVG_ICONS.items} ${t('menuItems')}
           </button>
-          <button class="btn btn-outline btn-sm" data-action="staff-logout">
-            🚪 ${t('logout')}
+          <button class="btn-settings" data-action="toggle-settings" aria-label="${t('settings')}" style="background: none; border: none; color: var(--text-dark); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 6px; border-radius: 50%; transition: background 0.2s;">
+            ${SVG_ICONS.settings}
+          </button>
+          <button class="btn btn-outline btn-sm" data-action="staff-logout" style="display: inline-flex; align-items: center; gap: 6px;">
+            ${SVG_ICONS.logout} ${t('logout')}
           </button>
         </div>
 
         <!-- Mobile Right Items (only visible on mobile) -->
         <div class="mobile-right-items mobile-only">
           <button class="btn-logout-icon" data-action="staff-logout" aria-label="${t('logout')}">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            ${SVG_ICONS.logout}
           </button>
         </div>
 
@@ -329,19 +368,49 @@ function renderNavbar(isStaff = false) {
             </div>
             <button class="btn-close" data-action="toggle-mobile-menu">&times;</button>
           </div>
+          
+          <!-- Live Stats (Mobile only burger drawer) -->
+          <div class="mobile-drawer-stats">
+            <div class="drawer-stat-item">
+              <span class="drawer-stat-icon">${SVG_ICONS.orders}</span>
+              <div class="drawer-stat-info">
+                <span class="drawer-stat-value">${todayOrders.length}</span>
+                <span class="drawer-stat-label">${t('ordersToday') || 'Orders Today'}</span>
+              </div>
+            </div>
+            <div class="drawer-stat-item">
+              <span class="drawer-stat-icon">${SVG_ICONS.pending}</span>
+              <div class="drawer-stat-info">
+                <span class="drawer-stat-value">${pendingOrders.length}</span>
+                <span class="drawer-stat-label">${t('pending') || 'Pending'}</span>
+              </div>
+            </div>
+            <div class="drawer-stat-item">
+              <span class="drawer-stat-icon">${SVG_ICONS.revenue}</span>
+              <div class="drawer-stat-info">
+                <span class="drawer-stat-value">${formatCurrency(revenueToday)}</span>
+                <span class="drawer-stat-label">${t('revenueToday') || 'Revenue Today'}</span>
+              </div>
+            </div>
+          </div>
+
           <div class="mobile-nav-body">
             <button class="mobile-nav-item mobile-nav-btn ${state.dashboardTab === 'orders' ? 'active' : ''}"
                     data-action="switch-dash-tab-mobile" data-tab="orders">
-              <span>📋</span>
+              ${SVG_ICONS.orders}
               <span>${t('ordersToday')}</span>
             </button>
             <button class="mobile-nav-item mobile-nav-btn ${state.dashboardTab === 'menu-manage' ? 'active' : ''}"
                     data-action="switch-dash-tab-mobile" data-tab="menu-manage">
-              <span>📝</span>
+              ${SVG_ICONS.items}
               <span>${t('menuItems')}</span>
             </button>
+            <button class="mobile-nav-item mobile-nav-btn" data-action="mobile-open-settings">
+              ${SVG_ICONS.settings}
+              <span>${t('settings')}</span>
+            </button>
             <button class="mobile-nav-item mobile-nav-btn" data-action="staff-logout-mobile" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
-              <span>🚪</span>
+              ${SVG_ICONS.logout}
               <span>${t('logout')}</span>
             </button>
           </div>
@@ -378,7 +447,7 @@ function renderNavbar(isStaff = false) {
           <span>${t('trackOrder')}</span>
         </a>
         <button class="btn-settings" data-action="toggle-settings" aria-label="${t('settings')}">
-          <svg class="settings-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          ${SVG_ICONS.settings}
         </button>
         <button class="btn-cart ${state.cartBouncing ? 'cart-bounce-active' : ''}" data-action="toggle-cart">
           <svg class="cart-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -414,13 +483,20 @@ function renderNavbar(isStaff = false) {
             <span>${t('trackOrder')}</span>
           </a>
           <button class="mobile-nav-item mobile-nav-btn" data-action="mobile-open-settings">
-            <svg class="settings-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            ${SVG_ICONS.settings}
             <span>${t('settings')}</span>
           </button>
-          <a href="#staff-login" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
-            <span>🔐</span>
-            <span>${t('staffPortal')}</span>
-          </a>
+          ${state.isLoggedIn ? `
+            <a href="#dashboard" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px; color: var(--success); display: inline-flex; align-items: center; gap: 8px;">
+              ${SVG_ICONS.orders}
+              <span>${t('goToDashboard')}</span>
+            </a>
+          ` : `
+            <a href="#staff-login" class="mobile-nav-item" data-action="toggle-mobile-menu" style="margin-top: 20px; border-top: 1px solid var(--gray-border); padding-top: 20px;">
+              ${SVG_ICONS.lock}
+              <span>${t('staffPortal')}</span>
+            </a>
+          `}
         </div>
       </aside>
     </nav>
@@ -464,7 +540,7 @@ function renderMenu() {
         ${CATEGORIES.map(cat => `
           <button class="cat-tab ${state.selectedCategory === cat.id ? 'active' : ''}"
                   data-action="select-category" data-category="${cat.id}">
-            <span class="cat-icon">${cat.icon}</span>
+            <span class="cat-icon">${getCategoryIcon(cat.id)}</span>
             <span class="cat-name">${cat.name}</span>
           </button>
         `).join('')}
@@ -573,7 +649,7 @@ function renderCheckoutModal() {
     <div class="modal-overlay ${state.checkoutOpen ? 'open' : ''}" data-action="close-checkout">
       <div class="modal checkout-modal ${state.checkoutOpen ? 'open' : ''}" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h3>📝 ${t('checkout')}</h3>
+          <h3>${SVG_ICONS.orders} ${t('checkout')}</h3>
           <button class="btn-close" data-action="close-checkout">&times;</button>
         </div>
         <form id="checkoutForm" data-form="checkout">
@@ -589,7 +665,7 @@ function renderCheckoutModal() {
             <label for="custLocation">${t('location')} *</label>
             <div class="input-with-icon" style="position: relative; display: flex; align-items: center;">
               <input type="text" id="custLocation" name="location" required placeholder="${t('locationPlaceholder')}" autocomplete="off" style="padding-right: 36px; width: 100%;" />
-              <span class="location-search-icon" style="position: absolute; right: 12px; color: var(--text-light); cursor: pointer;">🔍</span>
+              <span class="location-search-icon" style="position: absolute; right: 12px; color: var(--text-light); cursor: pointer; display: inline-flex; align-items: center;">${SVG_ICONS.search}</span>
             </div>
             <!-- Autocomplete suggestions dropdown -->
             <div id="locationSuggestions" class="location-suggestions-dropdown" style="display: none;"></div>
@@ -626,8 +702,8 @@ function renderCheckoutModal() {
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block btn-lg">
-            🎉 ${t('placeOrder')}
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            ${SVG_ICONS.completed} ${t('placeOrder')}
           </button>
         </form>
       </div>
@@ -684,7 +760,9 @@ function renderOrderConfirmation() {
           ${order.notes ? `<p><strong>${t('specialNotes')}:</strong> ${escapeHtml(order.notes)}</p>` : ''}
         </div>
 
-        <p class="confirm-msg">📞 ${t('contactConfirm')}</p>
+        <p class="confirm-msg" style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+          ${SVG_ICONS.phone} <span>${t('contactConfirm')}</span>
+        </p>
 
         <a href="#menu" class="btn btn-primary btn-lg">← ${t('backMenu')}</a>
       </div>
@@ -708,7 +786,7 @@ function renderTrackOrder() {
     <div class="track-page">
       <div class="track-container glass-card animate-fade-in">
         <div class="track-header">
-          <h2>🔍 ${t('trackYourOrder')}</h2>
+          <h2 style="display: flex; align-items: center; justify-content: center; gap: 8px;">${SVG_ICONS.track} ${t('trackYourOrder')}</h2>
           <p class="text-muted">${t('enterOrderNum')}</p>
         </div>
 
@@ -759,7 +837,7 @@ function renderTrackOrder() {
             </div>
           ` : `
             <div class="empty-state animate-fade-in">
-              <p style="font-size:3rem;">🔎</p>
+              <p style="font-size:3rem; opacity:0.3; display:inline-block;">${SVG_ICONS.track}</p>
               <h3>${t('orderNotFound')}</h3>
               <p class="text-muted">${state.language === 'ar' ? `لم نتمكن من العثور على طلب بالرقم <strong>"${escapeHtml(state.trackedOrderId)}"</strong>. يرجى التحقق مرة أخرى.` : (state.language === 'fr' ? `Impossible de trouver une commande avec le numéro <strong>"${escapeHtml(state.trackedOrderId)}"</strong>.` : `We couldn't find an order with number <strong>"${escapeHtml(state.trackedOrderId)}"</strong>. Please double-check and try again.`)}</p>
             </div>
@@ -804,8 +882,8 @@ function renderTrackOrder() {
 
 function renderTrackingStepper(status) {
   const steps = [
-    { label: t('orderReceived'), status: 'Pending', icon: '📝', desc: t('orderReceivedDesc') },
-    { label: t('completed'), status: 'Completed', icon: '🎉', desc: t('completedDesc') }
+    { label: t('orderReceived'), status: 'Pending', icon: SVG_ICONS.orders, desc: t('orderReceivedDesc') },
+    { label: t('completed'), status: 'Completed', icon: SVG_ICONS.completed, desc: t('completedDesc') }
   ];
 
   const currentIndex = steps.findIndex(s => s.status === status);
@@ -911,28 +989,28 @@ function renderDashboard() {
       <!-- Stats -->
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-icon">📦</div>
+          <div class="stat-icon">${SVG_ICONS.orders}</div>
           <div class="stat-info">
             <span class="stat-value">${todayOrders.length}</span>
             <span class="stat-label">Orders Today</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">⏳</div>
+          <div class="stat-icon">${SVG_ICONS.pending}</div>
           <div class="stat-info">
             <span class="stat-value">${pendingOrders.length}</span>
             <span class="stat-label">Pending</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">💰</div>
+          <div class="stat-icon">${SVG_ICONS.revenue}</div>
           <div class="stat-info">
             <span class="stat-value">${formatCurrency(revenueToday)}</span>
             <span class="stat-label">Revenue Today</span>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🧁</div>
+          <div class="stat-icon">${SVG_ICONS.items}</div>
           <div class="stat-info">
             <span class="stat-value">${state.menuItems.length}</span>
             <span class="stat-label">Menu Items</span>
@@ -976,10 +1054,12 @@ function renderOrdersTab() {
 
       ${orders.length === 0
         ? `<div class="empty-state">
-             <p style="font-size:3rem;">📭</p>
+             <p style="font-size:3rem; opacity:0.3; display:inline-block;">${SVG_ICONS.orders}</p>
              <p>No orders ${state.orderFilter !== 'all' ? `with status "${state.orderFilter}"` : 'yet'}</p>
            </div>`
-        : `<div class="orders-table-wrapper">
+        : `
+          <!-- Desktop Orders Table -->
+          <div class="orders-table-wrapper desktop-only">
             <table class="orders-table">
               <thead>
                 <tr>
@@ -999,8 +1079,8 @@ function renderOrdersTab() {
                     <td>
                       <strong>${escapeHtml(o.customerName)}</strong><br/>
                       <span class="text-muted">${escapeHtml(o.phone || '')}</span><br/>
-                      <span class="order-loc-badge">📍 ${escapeHtml(o.location || '')}</span>
-                      ${o.notes ? `<br/><span class="order-notes-badge">📝 ${escapeHtml(o.notes)}</span>` : ''}
+                      <span class="order-loc-badge">${SVG_ICONS.location} ${escapeHtml(o.location || '')}</span>
+                      ${o.notes ? `<br/><span class="order-notes-badge">${SVG_ICONS.notes} ${escapeHtml(o.notes)}</span>` : ''}
                     </td>
                     <td class="items-cell">
                       ${(o.items || []).map(i => `${escapeHtml(i.name)} ×${i.qty}`).join('<br/>')}
@@ -1012,14 +1092,14 @@ function renderOrdersTab() {
                       <div class="action-buttons-group">
                         ${o.status === 'Pending' ? `
                           <button class="btn btn-success btn-sm btn-quick" data-action="quick-status" data-order-id="${o.orderNumber}" data-status="Completed">
-                            ✅ ${t('complete')}
+                            ${SVG_ICONS.completed} ${t('complete')}
                           </button>
                         ` : ''}
                         <button class="btn btn-outline btn-sm btn-print" data-action="print-order" data-id="${o.orderNumber}">
-                          🖨️ ${t('print')}
+                          ${SVG_ICONS.print} ${t('print')}
                         </button>
                         <button class="btn btn-danger btn-sm" data-action="delete-order" data-id="${o.orderNumber}" title="Delete Order">
-                          🗑️
+                          ${SVG_ICONS.trash}
                         </button>
                       </div>
                       
@@ -1033,7 +1113,71 @@ function renderOrdersTab() {
                 `).join('')}
               </tbody>
             </table>
-           </div>`
+          </div>
+
+          <!-- Mobile Orders Card Layout (No swiping required) -->
+          <div class="orders-cards-mobile mobile-only">
+            ${orders.map(o => `
+              <div class="mobile-order-card animate-fade-in">
+                <div class="card-header">
+                  <span class="order-num">${o.orderNumber}</span>
+                  <span class="status-badge status-${slugify(o.status)}">${o.status}</span>
+                </div>
+                <div class="card-body-details">
+                  <div class="cust-sec">
+                    <strong>${escapeHtml(o.customerName)}</strong>
+                    ${o.phone ? `<br/><a href="tel:${escapeHtml(o.phone)}" class="phone-link">${escapeHtml(o.phone)}</a>` : ''}
+                  </div>
+                  <div class="loc-sec">
+                    ${SVG_ICONS.location} <span>${escapeHtml(o.location || '')}</span>
+                  </div>
+                  ${o.notes ? `
+                    <div class="notes-sec">
+                      ${SVG_ICONS.notes} <span>${escapeHtml(o.notes)}</span>
+                    </div>
+                  ` : ''}
+                  <div class="items-sec">
+                    ${(o.items || []).map(i => `
+                      <div class="item-row">
+                        <span>${escapeHtml(i.name)}</span>
+                        <span>×${i.qty}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="total-sec">
+                    <span>Total:</span>
+                    <strong>${formatCurrency(o.total)}</strong>
+                  </div>
+                  <div class="time-sec text-muted">
+                    <span>${formatTime(o.createdAt)}</span>
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <div class="action-buttons-group">
+                    ${o.status === 'Pending' ? `
+                      <button class="btn btn-success btn-sm btn-quick" data-action="quick-status" data-order-id="${o.orderNumber}" data-status="Completed">
+                        ${SVG_ICONS.completed} ${t('complete')}
+                      </button>
+                    ` : ''}
+                    <button class="btn btn-outline btn-sm btn-print" data-action="print-order" data-id="${o.orderNumber}">
+                      ${SVG_ICONS.print} ${t('print')}
+                    </button>
+                    <button class="btn btn-danger btn-sm" data-action="delete-order" data-id="${o.orderNumber}" title="Delete Order">
+                      ${SVG_ICONS.trash}
+                    </button>
+                  </div>
+                  <div class="select-wrapper">
+                    <select class="status-select" data-action="update-order-status" data-order-id="${o.orderNumber}">
+                      ${ORDER_STATUSES.map(s => `
+                        <option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>
+                      `).join('')}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `
       }
     </div>
   `;
@@ -1071,7 +1215,7 @@ function renderMenuManageTab() {
       <div class="divider" style="margin: 40px 0 20px 0; border-top: 1px solid var(--gray-border);"></div>
 
       <div class="section-header">
-        <h3>🎀 Categories</h3>
+        <h3 style="display: flex; align-items: center; gap: 8px;">${SVG_ICONS.custom} Categories</h3>
         <button class="btn btn-primary btn-sm" data-action="open-add-category">
           + Add New Category
         </button>
@@ -1081,7 +1225,7 @@ function renderMenuManageTab() {
         ${CATEGORIES.filter(c => c.id !== 'all').map(cat => `
           <div class="manage-card category-manage-card" style="padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 1.5rem;">${cat.icon}</span>
+              <span style="font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center;">${getCategoryIcon(cat.id)}</span>
               <div>
                 <h4 style="margin:0; font-family:var(--font-family); color:var(--text-dark);">${escapeHtml(cat.name)}</h4>
                 <p class="text-muted" style="margin:0; font-size:0.8rem;">ID: ${escapeHtml(cat.id)}</p>
@@ -1938,6 +2082,9 @@ function slugify(str) {
 
 function getCategoryIcon(categoryId) {
   const cat = CATEGORIES.find(c => c.id === categoryId);
+  if (SVG_ICONS[categoryId]) {
+    return SVG_ICONS[categoryId];
+  }
   return cat ? cat.icon : '✨';
 }
 

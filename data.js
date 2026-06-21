@@ -178,7 +178,8 @@ const TRANSLATIONS = {
     addCategory: 'Add Category',
     categoryId: 'Category ID',
     categoryName: 'Category Name',
-    categoryIcon: 'Emoji Icon'
+    categoryIcon: 'Emoji Icon',
+    goToDashboard: 'Go to Dashboard'
   },
   fr: {
     home: 'Accueil',
@@ -266,7 +267,8 @@ const TRANSLATIONS = {
     addCategory: 'Ajouter une catégorie',
     categoryId: 'ID de catégorie',
     categoryName: 'Nom de la catégorie',
-    categoryIcon: 'Icône émoji'
+    categoryIcon: 'Icône émoji',
+    goToDashboard: 'Aller au Tableau de Bord'
   },
   ar: {
     home: 'الرئيسية',
@@ -354,7 +356,8 @@ const TRANSLATIONS = {
     addCategory: 'إضافة فئة',
     categoryId: 'معرف الفئة',
     categoryName: 'اسم الفئة',
-    categoryIcon: 'رمز تعبيري'
+    categoryIcon: 'رمز تعبيري',
+    goToDashboard: 'لوحة التحكم'
   }
 };
 

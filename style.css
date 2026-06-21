@@ -2700,4 +2700,279 @@ body.rtl-layout .suggestion-item {
   display: block;
 }
 
+/* ================================================================
+   SVG OUTLINE VECTOR GRAPHICS & STYLES
+   ================================================================ */
+.svg-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  display: inline-block;
+  transition: var(--transition);
+}
+
+.svg-icon-sm {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.cat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-icon svg {
+  width: 20px;
+  height: 20px;
+  transition: var(--transition);
+}
+
+.cat-tab.active .cat-icon svg {
+  stroke: white;
+}
+
+.nav-tab svg,
+.btn-settings svg {
+  margin-right: 6px;
+}
+
+body.rtl-layout .nav-tab svg,
+body.rtl-layout .btn-settings svg {
+  margin-right: 0;
+  margin-left: 6px;
+}
+
+/* ================================================================
+   RESPONSIVE LAYOUT FOR ORDERS TABLE (MOBILE CARDS)
+   ================================================================ */
+.orders-cards-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.mobile-order-card {
+  background: var(--white);
+  border: 1px solid var(--gray-border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mobile-order-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.mobile-order-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-light);
+  padding-bottom: 10px;
+}
+
+.mobile-order-card .card-header .order-num {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--pink-primary);
+  font-family: 'Inter', monospace;
+}
+
+.mobile-order-card .card-body-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.mobile-order-card .cust-sec strong {
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.mobile-order-card .phone-link {
+  color: var(--pink-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mobile-order-card .loc-sec,
+.mobile-order-card .notes-sec {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--text-gray);
+  line-height: 1.4;
+}
+
+.mobile-order-card .loc-sec svg,
+.mobile-order-card .notes-sec svg {
+  margin-top: 3px;
+  flex-shrink: 0;
+  color: var(--pink-primary);
+}
+
+.mobile-order-card .items-sec {
+  background: var(--gray-light);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 4px;
+}
+
+.mobile-order-card .item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  padding: 4px 0;
+}
+
+.mobile-order-card .item-row:not(:last-child) {
+  border-bottom: 1px dashed rgba(0,0,0,0.05);
+}
+
+.mobile-order-card .total-sec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--gray-light);
+  padding-top: 8px;
+}
+
+.mobile-order-card .total-sec strong {
+  font-size: 1.05rem;
+  color: var(--text-dark);
+}
+
+.mobile-order-card .time-sec {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.mobile-order-card .card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--gray-light);
+  padding-top: 12px;
+}
+
+.mobile-order-card .card-actions .action-buttons-group {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.mobile-order-card .card-actions .action-buttons-group button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  font-size: 0.85rem;
+}
+
+.mobile-order-card .card-actions .select-wrapper {
+  width: 100%;
+}
+
+.mobile-order-card .card-actions .status-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-border);
+  background: var(--white);
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--text-dark);
+}
+
+/* ================================================================
+   MOBILE DRAWER LIVE STATS
+   ================================================================ */
+.mobile-drawer-stats {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-bottom: 1px solid var(--gray-border);
+}
+
+.drawer-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--gray-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.drawer-stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--pink-lightest);
+  color: var(--pink-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.drawer-stat-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.drawer-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.drawer-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-gray);
+}
+
+/* Screen Size Adaptations */
+@media (max-width: 1024px) {
+  .dashboard-page .stats-grid {
+    display: none !important;
+  }
+  .mobile-drawer-stats {
+    display: flex;
+  }
+}
+
 
