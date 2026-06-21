@@ -65,7 +65,12 @@ const SVG_ICONS = {
   notes: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
   print: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>`,
   trash: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`,
-  phone: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`
+  phone: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+  wave: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; display: inline-block; vertical-align: middle;"><path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5m0-5V5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v6M8 10V8a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8a8 8 0 0 0 8 8h2a8 8 0 0 0 8-8v-3a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/></svg>`,
+  cart: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`,
+  basket: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; display: inline-block; color: var(--pink-primary); opacity: 0.8;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`,
+  ticket: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>`,
+  error: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px; color: var(--danger);"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`
 };
 
 
@@ -137,7 +142,7 @@ function handleStorageChange(e) {
     
     if (state.currentView === 'dashboard' && state.orders.length > oldLength) {
       playNewOrderChime();
-      showToast('New order received! 🧁', 'success');
+      showToast('New order received!', 'success');
     }
     render();
   }
@@ -549,7 +554,7 @@ function renderMenu() {
       <!-- Menu Grid -->
       <div class="menu-grid">
         ${items.length === 0
-          ? `<div class="empty-state"><p>😔 No items found</p></div>`
+          ? `<div class="empty-state"><p style="font-size:3rem; opacity:0.3; display:inline-block; margin-bottom:8px;">${SVG_ICONS.search}</p><p>No items found</p></div>`
           : items.map((item, index) => `
             <div class="menu-card" style="animation-delay: ${index * 0.06}s">
               <div class="card-image">
@@ -589,14 +594,14 @@ function renderCartSidebar() {
     <div class="cart-overlay ${state.cartOpen ? 'open' : ''}" data-action="toggle-cart"></div>
     <aside class="cart-sidebar ${state.cartOpen ? 'open' : ''}">
       <div class="cart-header">
-        <h3>🛒 ${t('yourCart')}</h3>
+        <h3 style="display: flex; align-items: center; gap: 8px;">${SVG_ICONS.cart} ${t('yourCart')}</h3>
         <button class="btn-close" data-action="toggle-cart">&times;</button>
       </div>
 
       <div class="cart-body">
         ${state.cart.length === 0
           ? `<div class="empty-state">
-               <p style="font-size:3rem; margin:0;">🧺</p>
+               <p style="font-size:3rem; margin:0; display:inline-block;">${SVG_ICONS.basket}</p>
                <p>${t('cartEmpty')}</p>
                <p class="text-muted">${t('addTreats')}</p>
              </div>`
@@ -624,7 +629,7 @@ function renderCartSidebar() {
       ${state.cart.length > 0 ? `
         <div class="cart-footer">
           <div class="cart-order-preview">
-            <span>🎫</span> ${t('estOrderId')}: ${generateOrderNumber()}
+            ${SVG_ICONS.ticket} <span>${t('estOrderId')}: ${generateOrderNumber()}</span>
           </div>
           <div class="cart-total">
             <span>${t('total')}</span>
@@ -938,7 +943,7 @@ function renderStaffLogin() {
 
     <div class="login-page">
       <div class="glass-card login-card">
-        <div class="login-icon">🔐</div>
+        <div class="login-icon" style="display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 50%; background: var(--pink-lightest); color: var(--pink-primary); margin: 0 auto 20px;">${SVG_ICONS.lock}</div>
         <h2>Staff Portal</h2>
         <p class="text-muted">Sign in to manage orders</p>
 
@@ -952,7 +957,7 @@ function renderStaffLogin() {
             <input type="password" id="loginPass" name="password" required placeholder="Password" autocomplete="current-password" />
           </div>
           <div id="loginError" class="login-error" style="display:none;">
-            ❌ Invalid username or password
+            ${SVG_ICONS.error} Invalid username or password
           </div>
           <button type="submit" class="btn btn-primary btn-block">Sign In</button>
         </form>
@@ -981,7 +986,7 @@ function renderDashboard() {
       <!-- Dashboard Header -->
       <div class="dash-header">
         <div>
-          <h2>Welcome Back 👋</h2>
+          <h2 style="display: flex; align-items: center; gap: 8px;">Welcome Back ${SVG_ICONS.wave}</h2>
           <p>${formatDateFull(new Date())}</p>
         </div>
       </div>
@@ -1796,7 +1801,7 @@ function staffLogin(form) {
   if (username === STAFF_CREDENTIALS.username && password === STAFF_CREDENTIALS.password) {
     state.isLoggedIn = true;
     localStorage.setItem('salwa_logged_in', 'true');
-    showToast('Welcome back! 👋', 'success');
+    showToast('Welcome back!', 'success');
     window.location.hash = '#dashboard';
   } else {
     // Show error with shake
