@@ -4,7 +4,7 @@
 
 // ── Global Application State ────────────────────────────────
 const state = {
-  currentView:      'menu',      // menu | staff-login | dashboard
+  currentView:      'landing',   // landing | menu | staff-login | dashboard
   selectedCategory: 'all',
   searchQuery:      '',
   menuItems:        [],          // loaded from cloud database or localStorage
@@ -109,13 +109,8 @@ function init() {
 // ║  CLOUD DATABASE SYNCHRONIZATION ENGINE                    ║
 // ╚════════════════════════════════════════════════════════════╝
 
-/**
- * Fetch latest menu and categories directly from cloud database.
- * Uses cache: 'no-store' to bypass CDN/browser caching.
- */
 async function syncWithCloudDatabase(showToastOnManual = false) {
   try {
-    // 1. Check database connection status
     const statusRes = await fetch('/api/db?key=status', { cache: 'no-store' });
     if (statusRes.ok) {
       const statusData = await statusRes.json();
@@ -124,7 +119,6 @@ async function syncWithCloudDatabase(showToastOnManual = false) {
       state.cloudConnected = false;
     }
 
-    // 2. Fetch authoritative menu data
     const menuRes = await fetch('/api/db?key=menu', { cache: 'no-store' });
     let menuChanged = false;
     if (menuRes.ok) {
@@ -138,12 +132,10 @@ async function syncWithCloudDatabase(showToastOnManual = false) {
           menuChanged = true;
         }
       } else if (menuData && menuData.value === null && state.menuItems.length > 0) {
-        // Cloud is empty; seed initial defaults
         await uploadToCloud('menu', state.menuItems);
       }
     }
 
-    // 3. Fetch authoritative categories data
     const catsRes = await fetch('/api/db?key=categories', { cache: 'no-store' });
     let catsChanged = false;
     if (catsRes.ok) {
@@ -158,7 +150,6 @@ async function syncWithCloudDatabase(showToastOnManual = false) {
           catsChanged = true;
         }
       } else if (catsData && catsData.value === null && CATEGORIES.length > 0) {
-        // Cloud is empty; seed initial defaults
         await uploadToCloud('categories', CATEGORIES);
       }
     }
@@ -182,9 +173,6 @@ async function syncWithCloudDatabase(showToastOnManual = false) {
   }
 }
 
-/**
- * Upload updated menu or categories to the cloud database
- */
 async function uploadToCloud(key, data) {
   try {
     const res = await fetch(`/api/db?key=${key}`, {
@@ -250,7 +238,7 @@ function handleStorageChange(e) {
 // ╚════════════════════════════════════════════════════════════╝
 
 function router() {
-  const hash = window.location.hash.slice(1).split('?')[0] || 'menu';
+  const hash = window.location.hash.slice(1).split('?')[0] || 'landing';
 
   if (hash === 'dashboard') {
     if (!state.isLoggedIn) {
@@ -264,8 +252,10 @@ function router() {
       return;
     }
     state.currentView = 'staff-login';
-  } else {
+  } else if (hash === 'menu') {
     state.currentView = 'menu';
+  } else {
+    state.currentView = 'landing';
   }
 
   window.scrollTo({ top: 0, behavior: 'instant' });
@@ -284,8 +274,11 @@ function render() {
       app.innerHTML = renderDashboard();
       break;
     case 'menu':
-    default:
       app.innerHTML = renderMenu();
+      break;
+    case 'landing':
+    default:
+      app.innerHTML = renderLanding();
       break;
   }
 
@@ -296,16 +289,20 @@ function render() {
 // ║  COMPONENTS: NAVBAR & SETTINGS                            ║
 // ╚════════════════════════════════════════════════════════════╝
 
-function renderNavbar() {
+function renderNavbar(isTransparent = false) {
   return `
-    <header class="navbar">
+    <header class="navbar ${isTransparent ? 'navbar-transparent' : ''}">
       <div class="nav-container">
-        <a href="#menu" class="brand-logo">
+        <a href="#landing" class="brand-logo">
           <img src="assets/logo.png" alt="Salwa's Bakery Logo" class="brand-img" onerror="this.style.display='none'" />
           <span class="brand-text">${t('brandName')}</span>
         </a>
 
         <nav class="nav-links">
+          <a href="#landing" class="nav-link ${state.currentView === 'landing' ? 'active' : ''}">
+            ${t('home')}
+          </a>
+
           <a href="#menu" class="nav-link ${state.currentView === 'menu' ? 'active' : ''}">
             ${t('browseMenu')}
           </a>
@@ -334,6 +331,7 @@ function renderNavbar() {
       <!-- Mobile Dropdown -->
       ${state.mobileMenuOpen ? `
         <div class="mobile-nav-menu animate-fade-in">
+          <a href="#landing" class="mobile-nav-link" data-action="close-mobile-nav">${t('home')}</a>
           <a href="#menu" class="mobile-nav-link" data-action="close-mobile-nav">${t('browseMenu')}</a>
           ${state.isLoggedIn ? `
             <a href="#dashboard" class="mobile-nav-link" data-action="close-mobile-nav">${t('goToDashboard')}</a>
@@ -369,7 +367,6 @@ function renderSettingsModal() {
           <button class="btn-close" data-action="toggle-settings">&times;</button>
         </div>
         <div class="modal-body">
-          <!-- Language Selector -->
           <div class="form-group">
             <label>${t('language')}</label>
             <div class="segmented-control">
@@ -379,7 +376,6 @@ function renderSettingsModal() {
             </div>
           </div>
 
-          <!-- Theme Selector -->
           <div class="form-group">
             <label>${t('theme')}</label>
             <div class="segmented-control">
@@ -389,7 +385,6 @@ function renderSettingsModal() {
             </div>
           </div>
 
-          <!-- Font Size Selector -->
           <div class="form-group">
             <label>${t('fontSize')}</label>
             <div class="segmented-control">
@@ -399,7 +394,6 @@ function renderSettingsModal() {
             </div>
           </div>
 
-          <!-- Accessibility -->
           <div class="form-group checkbox-group">
             <label class="custom-checkbox">
               <input type="checkbox" id="reducedMotionCheck" ${state.reducedMotion ? 'checked' : ''} data-action="toggle-motion" />
@@ -413,6 +407,173 @@ function renderSettingsModal() {
         </div>
       </div>
     </div>
+  `;
+}
+
+// ╔════════════════════════════════════════════════════════════╗
+// ║  VIEW: HOME / LANDING PAGE                                 ║
+// ╚════════════════════════════════════════════════════════════╝
+
+function renderLanding() {
+  const featured = state.menuItems.slice(0, 4);
+
+  return `
+    ${renderNavbar(true)}
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-bg">
+        <img src="assets/hero.png" alt="Salwa's Bakery Fresh Treats" class="hero-bg-img" />
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <h1 class="hero-title animate-slide-up">${t('heroTitle')}</h1>
+        <p class="hero-subtitle animate-slide-up" style="animation-delay: 0.15s">
+          ${t('heroSub')}
+        </p>
+        <div class="hero-actions animate-slide-up" style="animation-delay: 0.3s">
+          <a href="#menu" class="btn btn-primary btn-lg">${t('browseMenu')}</a>
+          <a href="#staff-login" class="btn btn-outline btn-lg hero-outline-btn">${SVG_ICONS.lock} ${t('staffPortal')}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Props Bar -->
+    <section class="value-props">
+      <div class="value-prop-item">
+        <span class="value-prop-icon">🌿</span>
+        <div>
+          <h4>${t('valueProp1Title')}</h4>
+          <p>${t('valueProp1Desc')}</p>
+        </div>
+      </div>
+      <div class="value-prop-item">
+        <span class="value-prop-icon">⏰</span>
+        <div>
+          <h4>${t('valueProp2Title')}</h4>
+          <p>${t('valueProp2Desc')}</p>
+        </div>
+      </div>
+      <div class="value-prop-item">
+        <span class="value-prop-icon">🎨</span>
+        <div>
+          <h4>${t('valueProp3Title')}</h4>
+          <p>${t('valueProp3Desc')}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Showcase -->
+    <section class="section categories-section">
+      <div class="section-header">
+        <h2 class="section-title">${t('exploreCategories')}</h2>
+        <p class="section-subtitle">${t('exploreCategoriesSub')}</p>
+      </div>
+
+      <div class="category-cards-grid">
+        ${CATEGORIES.filter(c => c.id !== 'all').map(cat => `
+          <div class="category-showcase-card" data-action="go-to-category" data-category="${cat.id}">
+            <div class="cat-card-icon">${cat.icon || '✨'}</div>
+            <h3 class="cat-card-name">${escapeHtml(cat.name)}</h3>
+            <span class="cat-card-arrow">View &rarr;</span>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <!-- Featured Menu Items -->
+    <section class="section featured-section">
+      <div class="section-header">
+        <h2 class="section-title">${t('featuredTitle')}</h2>
+        <p class="section-subtitle">${t('featuredSub')}</p>
+      </div>
+
+      <div class="menu-grid">
+        ${featured.map(item => {
+          const isAvailable = item.available !== false;
+          const catObj = CATEGORIES.find(c => c.id === item.category);
+          const catName = catObj ? catObj.name : capitalize(item.category);
+          const catIcon = catObj ? (catObj.icon || '') : '';
+
+          return `
+            <article class="menu-card ${!isAvailable ? 'card-sold-out' : ''}">
+              <div class="card-image-wrap">
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='assets/cake.png'" />
+                <span class="card-category-badge">${catIcon} ${escapeHtml(catName)}</span>
+                ${!isAvailable ? `<span class="badge-sold-out">${t('soldOut')}</span>` : ''}
+              </div>
+              <div class="card-body">
+                <div class="card-header-row">
+                  <h3 class="card-title">${escapeHtml(item.name)}</h3>
+                  <span class="card-price">${formatCurrency(item.price)}</span>
+                </div>
+                <p class="card-desc">${escapeHtml(item.description)}</p>
+              </div>
+            </article>
+          `;
+        }).join('')}
+      </div>
+
+      <div class="text-center" style="margin-top: 40px; text-align: center;">
+        <a href="#menu" class="btn btn-outline btn-lg">${t('viewFullMenu')}</a>
+      </div>
+    </section>
+
+    <!-- Customer Reviews -->
+    <section class="section reviews-section">
+      <div class="section-header">
+        <h2 class="section-title">${t('reviewsTitle')}</h2>
+        <p class="section-subtitle">${t('reviewsSub')}</p>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The Red Velvet Cake for our celebration was absolutely delicious! Incredibly moist, with silky smooth cream cheese frosting."</p>
+          <div class="review-author">
+            <strong>Sarah M.</strong>
+            <span>Toronto, ON</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The rose pistachio cupcakes are heavenly! The aroma, the texture, everything is top notch. Truly authentic taste."</p>
+          <div class="review-author">
+            <strong>Omar K.</strong>
+            <span>Mississauga, ON</span>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Best French macarons in the GTA hands down. Crispy shell, chewy center, perfect fillings. 10/10!"</p>
+          <div class="review-author">
+            <strong>Elena R.</strong>
+            <span>Oakville, ON</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <img src="assets/logo.png" alt="Salwa's Bakery" style="height: 32px; border-radius: 50%;" />
+            <h3 style="margin: 0; color: var(--pink-primary); font-family: var(--font-serif);">${t('brandName')}</h3>
+          </div>
+          <p class="text-muted" style="font-size: 0.9rem;">Handcrafted cakes, cupcakes & pastries in Canada, GTA.</p>
+        </div>
+        <div class="footer-nav-col">
+          <a href="#landing" style="margin-right: 16px;">${t('home')}</a>
+          <a href="#menu" style="margin-right: 16px;">${t('ourMenu')}</a>
+          <a href="#staff-login" class="footer-staff-link">${SVG_ICONS.lock} ${t('staffPortal')}</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; ${new Date().getFullYear()} ${t('brandName')}. All rights reserved.</p>
+      </div>
+    </footer>
   `;
 }
 
@@ -432,11 +593,11 @@ function renderMenu() {
     : filtered;
 
   return `
-    ${renderNavbar()}
+    ${renderNavbar(false)}
 
     <main class="menu-page">
-      <!-- Hero Banner -->
-      <section class="menu-hero">
+      <!-- Header -->
+      <section class="menu-hero-compact">
         <div class="hero-content">
           <h1 class="hero-title">${t('ourMenu')}</h1>
           <p class="hero-subtitle">${t('freshBaked')}</p>
@@ -532,10 +693,10 @@ function renderMenu() {
 
 function renderStaffLogin() {
   return `
-    ${renderNavbar()}
+    ${renderNavbar(false)}
 
     <div class="auth-container">
-      <div class="auth-card">
+      <div class="auth-card animate-slide-up">
         <div class="auth-header">
           <div class="auth-icon">${SVG_ICONS.lock}</div>
           <h2>${t('staffPortal')}</h2>
@@ -575,10 +736,9 @@ function renderDashboard() {
   const soldOutCount = state.menuItems.filter(i => i.available === false).length;
 
   return `
-    ${renderNavbar()}
+    ${renderNavbar(false)}
 
-    <div class="dashboard-page">
-      <!-- Portal Top Bar -->
+    <div class="dashboard-page animate-fade-in">
       <div class="portal-header">
         <div>
           <h2>${SVG_ICONS.settings} ${t('staffPortal')}</h2>
@@ -605,7 +765,6 @@ function renderDashboard() {
         </div>
       </div>
 
-      <!-- Notice Banner if DB is not connected on Vercel -->
       ${state.cloudConnected === false ? `
         <div class="db-notice-card">
           <div class="db-notice-icon">💡</div>
@@ -616,7 +775,6 @@ function renderDashboard() {
         </div>
       ` : ''}
 
-      <!-- Quick Metrics -->
       <div class="portal-metrics-grid">
         <div class="metric-card">
           <span class="metric-num">${state.menuItems.length}</span>
@@ -795,7 +953,6 @@ function renderMenuItemModal() {
             </div>
           </div>
 
-          <!-- Image Selection & Upload -->
           <div class="form-group">
             <label>${t('image')} (Upload File, Choose Preset, or Enter URL)</label>
             
@@ -817,7 +974,6 @@ function renderMenuItemModal() {
               </div>
             </div>
 
-            <!-- Preset Bakery Assets -->
             <div class="preset-assets-selector">
               <span class="text-muted" style="font-size: 0.8rem;">Presets:</span>
               <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cake.png">🎂 Cake</button>
@@ -828,7 +984,6 @@ function renderMenuItemModal() {
             </div>
           </div>
 
-          <!-- Availability Status -->
           <div class="form-group checkbox-group" style="margin-top: 12px;">
             <label class="custom-checkbox">
               <input type="checkbox" name="itemAvailable" ${!isEdit || item.available !== false ? 'checked' : ''} />
@@ -905,6 +1060,11 @@ function handleGlobalClick(e) {
       render();
       break;
 
+    case 'go-to-category':
+      state.selectedCategory = target.dataset.category;
+      window.location.hash = '#menu';
+      break;
+
     case 'clear-search':
       state.searchQuery = '';
       const input = document.getElementById('menuSearch');
@@ -962,7 +1122,7 @@ function handleGlobalClick(e) {
       localStorage.removeItem('salwa_logged_in');
       sessionStorage.removeItem('salwa_logged_in');
       state.mobileMenuOpen = false;
-      window.location.hash = '#menu';
+      window.location.hash = '#landing';
       showToast('Logged out of Staff Portal', 'info');
       render();
       break;
@@ -1075,7 +1235,6 @@ function handleGlobalSubmit(e) {
     const available = form.querySelector('[name="itemAvailable"]') ? form.querySelector('[name="itemAvailable"]').checked : true;
 
     if (idField) {
-      // Edit existing
       const editId = Number(idField);
       const idx = state.menuItems.findIndex(i => i.id === editId);
       if (idx !== -1) {
@@ -1090,7 +1249,6 @@ function handleGlobalSubmit(e) {
         };
       }
     } else {
-      // Add new
       const nextId = state.menuItems.reduce((max, i) => Math.max(max, i.id), 0) + 1;
       state.menuItems.push({
         id: nextId,
@@ -1136,7 +1294,6 @@ function handleGlobalInput(e) {
     state.searchQuery = e.target.value;
     const gridSection = document.querySelector('.menu-grid-section');
     if (gridSection) {
-      // Re-render only the menu grid for smooth typing
       const filtered = state.selectedCategory === 'all'
         ? state.menuItems
         : state.menuItems.filter(i => i.category === state.selectedCategory);
@@ -1198,14 +1355,12 @@ function handleGlobalInput(e) {
 }
 
 function handleGlobalChange(e) {
-  // File upload input inside Add/Edit Item modal
   if (e.target.id === 'itemImageFile') {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      // Compress and resize image using canvas for fast cloud storage & instant loading
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');

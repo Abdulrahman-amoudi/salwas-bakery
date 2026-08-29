@@ -120,7 +120,22 @@ const TRANSLATIONS = {
     xl: 'Extra Large',
     goToMenu: 'View Live Menu',
     goToDashboard: 'Staff Dashboard',
-    dbSetupNotice: 'Connect a Postgres database in your Vercel project (via Vercel Storage -> Neon or Vercel Postgres) to enable automatic cloud synchronization across all devices.'
+    dbSetupNotice: 'Connect a Postgres database in your Vercel project (via Vercel Storage -> Neon or Vercel Postgres) to enable automatic cloud synchronization across all devices.',
+    heroTitle: 'Handcrafted with Love,<br/>Baked to Perfection',
+    heroSub: 'Artisanal cakes, cupcakes, pastries & custom confections freshly baked every morning in Canada, GTA.',
+    valueProp1Title: '100% Fresh Ingredients',
+    valueProp1Desc: 'Real butter, organic flour & premium Belgian chocolate',
+    valueProp2Title: 'Baked Fresh Daily',
+    valueProp2Desc: 'Every single pastry is baked the morning you enjoy it',
+    valueProp3Title: 'Custom Cake Designs',
+    valueProp3Desc: 'Personalized decorations for your most memorable events',
+    exploreCategories: 'Explore Our Categories',
+    exploreCategoriesSub: 'From delicate macarons to show-stopping multi-tier celebration cakes',
+    featuredTitle: 'Customer Favourites',
+    featuredSub: 'Our most cherished baked creations, handpicked for you',
+    viewFullMenu: 'View Full Menu &rarr;',
+    reviewsTitle: 'What Our Customers Say',
+    reviewsSub: 'Over 500+ happy celebrations sweetened by Salwa\'s Bakery'
   },
   fr: {
     brandName: "Salwa's Bakery",
@@ -181,7 +196,22 @@ const TRANSLATIONS = {
     xl: 'Très Grand',
     goToMenu: 'Voir le Menu en direct',
     goToDashboard: 'Tableau de Bord',
-    dbSetupNotice: 'Liez une base Postgres dans Vercel Storage (Neon / Vercel Postgres) pour la synchronisation automatique.'
+    dbSetupNotice: 'Liez une base Postgres dans Vercel Storage (Neon / Vercel Postgres) pour la synchronisation automatique.',
+    heroTitle: 'Fait à la main avec amour,<br/>Cuit à la perfection',
+    heroSub: 'Gâteaux artisanaux, cupcakes et pâtisseries cuits frais chaque matin au Canada, GTA.',
+    valueProp1Title: 'Ingrédients 100% Frais',
+    valueProp1Desc: 'Vrai beurre, farine biologique et chocolat belge de qualité',
+    valueProp2Title: 'Cuit Frais Tous les Jours',
+    valueProp2Desc: 'Chaque pâtisserie est préparée et cuite le matin même',
+    valueProp3Title: 'Créations Personnalisées',
+    valueProp3Desc: 'Décorations sur mesure pour vos moments inoubliables',
+    exploreCategories: 'Découvrez Nos Catégories',
+    exploreCategoriesSub: 'Des macarons délicats aux superbes gâteaux de célébration',
+    featuredTitle: 'Les Favoris de nos Clients',
+    featuredSub: 'Nos créations les plus appréciées, sélectionnées pour vous',
+    viewFullMenu: 'Voir Tout le Menu &rarr;',
+    reviewsTitle: 'Ce Que Disent Nos Clients',
+    reviewsSub: 'Plus de 500+ célébrations adoucies par Salwa\'s Bakery'
   },
   ar: {
     brandName: 'مخبز سلوى',
@@ -242,7 +272,22 @@ const TRANSLATIONS = {
     xl: 'كبير جداً',
     goToMenu: 'عرض القائمة للعملاء',
     goToDashboard: 'لوحة التحكم',
-    dbSetupNotice: 'قم بربط قاعدة بيانات PostgreSQL في Vercel (Neon أو Vercel Postgres) لتفعيل المزامنة الفورية عبر كافة الأجهزة.'
+    dbSetupNotice: 'قم بربط قاعدة بيانات PostgreSQL في Vercel (Neon أو Vercel Postgres) لتفعيل المزامنة الفورية عبر كافة الأجهزة.',
+    heroTitle: 'صنع بكل حب،<br/>مخبوز بإتقان',
+    heroSub: 'كيك وحلويات ومعجنات فاخرة ومخبوزة طازجة كل صباح في كندا، GTA.',
+    valueProp1Title: 'مكونات طبيعية 100%',
+    valueProp1Desc: 'زبدة نقية، طحين عضوي، وشوكولاتة بلجيكية فاخرة',
+    valueProp2Title: 'مخبوز طازج يومياً',
+    valueProp2Desc: 'كل قطعة تخبز بعناية في صباح يوم استلامها',
+    valueProp3Title: 'تصاميم كيك مخصصة',
+    valueProp3Desc: 'تزيين استثنائي ومخصص لأجمل مناسباتكم واحتفالاتكم',
+    exploreCategories: 'استكشف تصنيفاتنا',
+    exploreCategoriesSub: 'من الماكرون الفرنسي الرقيق إلى قوالب الكيك الاحتفالية الفاخرة',
+    featuredTitle: 'المفضلة لدى عملائنا',
+    featuredSub: 'أشهى ابتكاراتنا المختارة بعناية لتنال إعجابكم',
+    viewFullMenu: 'عرض كامل القائمة &larr;',
+    reviewsTitle: 'آراء عملائنا',
+    reviewsSub: 'أكثر من 500+ مناسبة واحتفال تم تحليتها بمخبوزات سلوى'
   }
 };
 
@@ -284,5 +329,3 @@ function capitalize(str) {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-
