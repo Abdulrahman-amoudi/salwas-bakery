@@ -4,38 +4,38 @@
 
 /**
  * Default menu items grouped by category.
- * Each item has a unique id, display info, price (CAD), and an
- * image path relative to the project root.
+ * Each item has a unique id, display info, price (CAD),
+ * image path relative to the project root, and availability status.
  */
 const DEFAULT_MENU_ITEMS = [
   // ── CAKES ──────────────────────────────────────────────────
-  { id: 1,  name: 'Red Velvet Cake',        description: 'Rich red velvet layers with cream cheese frosting',                          price: 45.00,  category: 'cakes',    image: 'assets/cake.png' },
-  { id: 2,  name: 'Chocolate Fudge Cake',   description: 'Decadent dark chocolate layers with fudge ganache',                          price: 42.00,  category: 'cakes',    image: 'assets/cake.png' },
-  { id: 3,  name: 'Vanilla Bean Cake',      description: 'Classic vanilla sponge with Madagascar vanilla buttercream',                 price: 38.00,  category: 'cakes',    image: 'assets/cake.png' },
-  { id: 4,  name: 'Strawberry Shortcake',   description: 'Light sponge with fresh strawberries and whipped cream',                     price: 40.00,  category: 'cakes',    image: 'assets/cake.png' },
+  { id: 1,  name: 'Red Velvet Cake',        description: 'Rich red velvet layers with cream cheese frosting',                          price: 45.00,  category: 'cakes',    image: 'assets/cake.png',        available: true },
+  { id: 2,  name: 'Chocolate Fudge Cake',   description: 'Decadent dark chocolate layers with fudge ganache',                          price: 42.00,  category: 'cakes',    image: 'assets/cake.png',        available: true },
+  { id: 3,  name: 'Vanilla Bean Cake',      description: 'Classic vanilla sponge with Madagascar vanilla buttercream',                 price: 38.00,  category: 'cakes',    image: 'assets/cake.png',        available: true },
+  { id: 4,  name: 'Strawberry Shortcake',   description: 'Light sponge with fresh strawberries and whipped cream',                     price: 40.00,  category: 'cakes',    image: 'assets/cake.png',        available: true },
 
   // ── CUPCAKES ───────────────────────────────────────────────
-  { id: 5,  name: 'Classic Vanilla Cupcake',    description: 'Fluffy vanilla cupcake with rose buttercream swirl',                     price: 4.50,   category: 'cupcakes', image: 'assets/cupcake.png' },
-  { id: 6,  name: 'Chocolate Ganache Cupcake',  description: 'Rich chocolate cupcake topped with silky ganache',                       price: 5.00,   category: 'cupcakes', image: 'assets/cupcake.png' },
-  { id: 7,  name: 'Rose Pistachio Cupcake',     description: 'Delicate rose-flavored cupcake with pistachio crumble',                  price: 5.50,   category: 'cupcakes', image: 'assets/cupcake.png' },
-  { id: 8,  name: 'Lemon Blueberry Cupcake',    description: 'Zesty lemon cake with fresh blueberry compote',                          price: 5.00,   category: 'cupcakes', image: 'assets/cupcake.png' },
+  { id: 5,  name: 'Classic Vanilla Cupcake',    description: 'Fluffy vanilla cupcake with rose buttercream swirl',                     price: 4.50,   category: 'cupcakes', image: 'assets/cupcake.png',     available: true },
+  { id: 6,  name: 'Chocolate Ganache Cupcake',  description: 'Rich chocolate cupcake topped with silky ganache',                       price: 5.00,   category: 'cupcakes', image: 'assets/cupcake.png',     available: true },
+  { id: 7,  name: 'Rose Pistachio Cupcake',     description: 'Delicate rose-flavored cupcake with pistachio crumble',                  price: 5.50,   category: 'cupcakes', image: 'assets/cupcake.png',     available: true },
+  { id: 8,  name: 'Lemon Blueberry Cupcake',    description: 'Zesty lemon cake with fresh blueberry compote',                          price: 5.00,   category: 'cupcakes', image: 'assets/cupcake.png',     available: true },
 
   // ── COOKIES & MACARONS ─────────────────────────────────────
-  { id: 9,  name: 'French Macarons (Box of 6)',     description: 'Assorted flavors: rose, pistachio, vanilla, chocolate, lavender, raspberry', price: 18.00, category: 'cookies', image: 'assets/cookie.png' },
-  { id: 10, name: 'Chocolate Chip Cookies (6pc)',    description: 'Classic chewy cookies with Belgian chocolate chunks',                        price: 12.00, category: 'cookies', image: 'assets/cookie.png' },
-  { id: 11, name: 'Decorated Sugar Cookies (6pc)',   description: 'Hand-decorated royal icing cookies, customizable designs',                   price: 22.00, category: 'cookies', image: 'assets/cookie.png' },
-  { id: 12, name: 'Almond Biscotti (8pc)',           description: 'Twice-baked Italian almond biscotti, perfect with coffee',                   price: 14.00, category: 'cookies', image: 'assets/cookie.png' },
+  { id: 9,  name: 'French Macarons (Box of 6)',     description: 'Assorted flavors: rose, pistachio, vanilla, chocolate, lavender, raspberry', price: 18.00, category: 'cookies', image: 'assets/cookie.png',      available: true },
+  { id: 10, name: 'Chocolate Chip Cookies (6pc)',    description: 'Classic chewy cookies with Belgian chocolate chunks',                        price: 12.00, category: 'cookies', image: 'assets/cookie.png',      available: true },
+  { id: 11, name: 'Decorated Sugar Cookies (6pc)',   description: 'Hand-decorated royal icing cookies, customizable designs',                   price: 22.00, category: 'cookies', image: 'assets/cookie.png',      available: true },
+  { id: 12, name: 'Almond Biscotti (8pc)',           description: 'Twice-baked Italian almond biscotti, perfect with coffee',                   price: 14.00, category: 'cookies', image: 'assets/cookie.png',      available: true },
 
   // ── PASTRIES ───────────────────────────────────────────────
-  { id: 13, name: 'Butter Croissant',  description: 'Flaky, golden French-style butter croissant',                price: 4.00,  category: 'pastries', image: 'assets/pastry.png' },
-  { id: 14, name: 'Cinnamon Roll',     description: 'Soft, gooey cinnamon roll with cream cheese glaze',          price: 5.50,  category: 'pastries', image: 'assets/pastry.png' },
-  { id: 15, name: 'Danish Pastry',     description: 'Flaky pastry filled with seasonal fruit and custard',        price: 4.50,  category: 'pastries', image: 'assets/pastry.png' },
-  { id: 16, name: 'Baklava (4pc)',     description: 'Layers of phyllo dough with mixed nuts and honey syrup',     price: 10.00, category: 'pastries', image: 'assets/pastry.png' },
+  { id: 13, name: 'Butter Croissant',  description: 'Flaky, golden French-style butter croissant',                price: 4.00,  category: 'pastries', image: 'assets/pastry.png',      available: true },
+  { id: 14, name: 'Cinnamon Roll',     description: 'Soft, gooey cinnamon roll with cream cheese glaze',          price: 5.50,  category: 'pastries', image: 'assets/pastry.png',      available: true },
+  { id: 15, name: 'Danish Pastry',     description: 'Flaky pastry filled with seasonal fruit and custard',        price: 4.50,  category: 'pastries', image: 'assets/pastry.png',      available: true },
+  { id: 16, name: 'Baklava (4pc)',     description: 'Layers of phyllo dough with mixed nuts and honey syrup',     price: 10.00, category: 'pastries', image: 'assets/pastry.png',      available: true },
 
   // ── CUSTOM ORDERS ──────────────────────────────────────────
-  { id: 17, name: 'Custom Celebration Cake',  description: 'Personalized cake with your choice of flavor, design & message. Contact us for details.', price: 85.00,  category: 'custom', image: 'assets/custom_cake.png' },
-  { id: 18, name: 'Custom Cupcake Box (12pc)', description: 'Box of 12 custom-designed cupcakes for your special event',                              price: 55.00,  category: 'custom', image: 'assets/cupcake.png' },
-  { id: 19, name: 'Dessert Table Package',     description: 'Full dessert spread for events: cake, cupcakes, cookies & pastries. Serves 30+',         price: 250.00, category: 'custom', image: 'assets/custom_cake.png' },
+  { id: 17, name: 'Custom Celebration Cake',  description: 'Personalized cake with your choice of flavor, design & message. Contact us for details.', price: 85.00,  category: 'custom', image: 'assets/custom_cake.png', available: true },
+  { id: 18, name: 'Custom Cupcake Box (12pc)', description: 'Box of 12 custom-designed cupcakes for your special event',                              price: 55.00,  category: 'custom', image: 'assets/cupcake.png',     available: true },
+  { id: 19, name: 'Dessert Table Package',     description: 'Full dessert spread for events: cake, cupcakes, cookies & pastries. Serves 30+',         price: 250.00, category: 'custom', image: 'assets/custom_cake.png', available: true },
 ];
 
 /**
@@ -51,75 +51,58 @@ let CATEGORIES = [
   { id: 'custom',   name: 'Custom Orders',      icon: '🎀' },
 ];
 
-/** Hard-coded staff credentials (demo only). */
+/** Hard-coded staff credentials. */
 const STAFF_CREDENTIALS = {
   username: 'salwa',
   password: 'amoudi'
 };
-
-/** Possible order lifecycle statuses. */
-const ORDER_STATUSES = ['Pending', 'Completed'];
-
-/**
- * Generate a unique, human-readable order number.
- * Format: SB-101, SB-102, sequential.
- */
-function generateOrderNumber() {
-  const orders = JSON.parse(localStorage.getItem('salwa_orders') || '[]');
-  let nextSeq = 101;
-  if (orders.length > 0) {
-    const seqs = orders.map(o => {
-      if (o.orderNumber && o.orderNumber.startsWith('SB-')) {
-        const num = parseInt(o.orderNumber.substring(3), 10);
-        // Ignore large date-based numbers (e.g. YYYYMMDD)
-        if (!isNaN(num) && num < 100000) {
-          return num;
-        }
-      }
-      return 0;
-    });
-    const maxSeq = Math.max(...seqs);
-    if (maxSeq >= 101) {
-      nextSeq = maxSeq + 1;
-    } else {
-      nextSeq = 101 + orders.length;
-    }
-  }
-  return `SB-${nextSeq}`;
-}
 
 // ============================================================
 //  TRANSLATIONS & LOCALISATION DICTIONARY
 // ============================================================
 const TRANSLATIONS = {
   en: {
+    brandName: "Salwa's Bakery",
     home: 'Home',
-    trackOrder: 'Track Order',
-    trackYourOrder: 'Track Your Order',
-    browseMenu: 'Browse Our Menu',
-    staffPortal: 'Staff Portal',
+    browseMenu: 'Browse Menu',
     ourMenu: 'Our Menu',
-    freshBaked: 'Fresh-baked daily with the finest ingredients',
-    searchMenu: 'Search our menu...',
-    addToCart: 'Add to Cart',
-    addedToCart: 'added to cart!',
-    yourCart: 'Your Cart',
-    cartEmpty: 'Your Cart is Empty',
-    addTreats: 'Add some delicious treats!',
-    total: 'Total',
-    proceedCheckout: 'Proceed to Checkout',
-    checkout: 'Checkout',
-    customerName: 'Customer Name',
-    phone: 'Phone Number',
-    email: 'Email',
-    orderType: 'Order Type',
-    specialNotes: 'Special Notes',
-    orderSummary: 'Order Summary',
-    placeOrder: 'Place Order',
-    placedSuccess: 'Order Placed Successfully!',
-    backMenu: 'Back to Menu',
-    datePlaced: 'Date Placed',
-    totalPaid: 'Total Paid',
+    freshBaked: 'Handcrafted fresh daily with premium ingredients',
+    searchMenu: 'Search treats & pastries...',
+    allItems: 'All Items',
+    noItemsFound: 'No menu items found.',
+    available: 'In Stock',
+    soldOut: 'Sold Out',
+    staffPortal: 'Staff Portal',
+    staffLogin: 'Staff Login',
+    username: 'Username',
+    password: 'Password',
+    signIn: 'Sign In',
+    logout: 'Logout',
+    welcomeBack: 'Welcome Back',
+    menuItems: 'Menu Items',
+    categories: 'Categories',
+    addNewItem: '+ Add New Item',
+    editItem: 'Edit Item',
+    deleteItem: 'Delete Item',
+    itemName: 'Item Name',
+    category: 'Category',
+    price: 'Price',
+    description: 'Description',
+    image: 'Image',
+    status: 'Status',
+    inStock: 'In Stock',
+    outOfStock: 'Sold Out',
+    saveChanges: 'Save Changes',
+    cancel: 'Cancel',
+    addNewCategory: '+ Add Category',
+    categoryId: 'Category ID',
+    categoryName: 'Category Name',
+    categoryIcon: 'Emoji / Icon',
+    confirmDelete: 'Are you sure you want to delete this item?',
+    confirmDeleteCat: 'Are you sure you want to delete this category? Items in this category will become uncategorized.',
+    cloudSynced: 'Cloud Synced',
+    offlineMode: 'Offline Mode (Local Only)',
+    syncNow: 'Refresh from Cloud',
     settings: 'Settings',
     language: 'Language',
     theme: 'Theme',
@@ -135,80 +118,52 @@ const TRANSLATIONS = {
     md: 'Medium',
     lg: 'Large',
     xl: 'Extra Large',
-    username: 'Username',
-    password: 'Password',
-    signIn: 'Sign In',
-    logout: 'Logout',
-    welcomeBack: 'Welcome Back',
-    ordersToday: 'Orders Today',
-    pending: 'Pending',
-    revenueToday: 'Revenue Today',
-    menuItems: 'Menu Items',
-    prep: 'Prep',
-    ready: 'Ready',
-    complete: 'Complete',
-    print: 'Print',
-    actions: 'Actions',
-    time: 'Time',
-    customer: 'Customer',
-    items: 'Items',
-    orderNum: 'Order #',
-    status: 'Status',
-    currentStatus: 'Current Status',
-    recentOrders: 'Your Recent Orders',
-    enterOrderNum: 'Enter your order number to check the status',
-    orderNotFound: 'Order Not Found',
-    noRecentOrders: 'No recent orders found.',
-    estOrderId: 'Est. Order ID',
-    pickup: 'Pickup',
-    delivery: 'Delivery',
-    contactConfirm: 'We\'ll contact you shortly to confirm your order',
-    bakingTimer: 'Chef Salwa is baking',
-    orderReceivedDesc: 'We have received your order',
-    preparingDesc: 'Chef Salwa is baking',
-    readyDesc: 'Out for delivery',
-    completedDesc: 'Delivered',
-    orderReceived: 'Order Received',
-    preparing: 'Preparing',
-    completed: 'Completed',
-    location: 'Delivery Address',
-    locationPlaceholder: 'e.g. 123 Main St, Toronto',
-    addedSuccess: 'Added! ✓',
-    categories: 'Categories',
-    addCategory: 'Add Category',
-    categoryId: 'Category ID',
-    categoryName: 'Category Name',
-    categoryIcon: 'Emoji Icon',
-    goToDashboard: 'Go to Dashboard'
+    goToMenu: 'View Live Menu',
+    goToDashboard: 'Staff Dashboard',
+    dbSetupNotice: 'Connect a Postgres database in your Vercel project (via Vercel Storage -> Neon or Vercel Postgres) to enable automatic cloud synchronization across all devices.'
   },
   fr: {
+    brandName: "Salwa's Bakery",
     home: 'Accueil',
-    trackOrder: 'Suivi de Commande',
-    trackYourOrder: 'Suivre Votre Commande',
-    browseMenu: 'Parcourir Notre Menu',
-    staffPortal: 'Portail du Personnel',
+    browseMenu: 'Parcourir le Menu',
     ourMenu: 'Notre Menu',
-    freshBaked: 'Cuit frais tous les jours avec les meilleurs ingrédients',
-    searchMenu: 'Rechercher dans notre menu...',
-    addToCart: 'Ajouter au Panier',
-    addedToCart: 'ajouté au panier !',
-    yourCart: 'Votre Panier',
-    cartEmpty: 'Votre panier est vide',
-    addTreats: 'Ajoutez de délicieuses friandises !',
-    total: 'Total',
-    proceedCheckout: 'Passer à la Caisse',
-    checkout: 'Caisse',
-    customerName: 'Nom du Client',
-    phone: 'Numéro de Téléphone',
-    email: 'E-mail',
-    orderType: 'Type de Commande',
-    specialNotes: 'Notes Spéciales',
-    orderSummary: 'Résumé de la Commande',
-    placeOrder: 'Passer la Commande',
-    placedSuccess: 'Commande passée avec succès !',
-    backMenu: 'Retour au Menu',
-    datePlaced: 'Date de Commande',
-    totalPaid: 'Total Payé',
+    freshBaked: 'Fait à la main tous les jours avec des ingrédients de qualité',
+    searchMenu: 'Rechercher des délices...',
+    allItems: 'Tous les articles',
+    noItemsFound: 'Aucun article trouvé.',
+    available: 'Disponible',
+    soldOut: 'Épuisé',
+    staffPortal: 'Portail du Personnel',
+    staffLogin: 'Connexion Personnel',
+    username: 'Nom d\'utilisateur',
+    password: 'Mot de passe',
+    signIn: 'Se Connecter',
+    logout: 'Se Déconnecter',
+    welcomeBack: 'Bienvenue',
+    menuItems: 'Articles du Menu',
+    categories: 'Catégories',
+    addNewItem: '+ Ajouter un article',
+    editItem: 'Modifier l\'article',
+    deleteItem: 'Supprimer l\'article',
+    itemName: 'Nom de l\'article',
+    category: 'Catégorie',
+    price: 'Prix',
+    description: 'Description',
+    image: 'Image',
+    status: 'Statut',
+    inStock: 'En stock',
+    outOfStock: 'Épuisé',
+    saveChanges: 'Enregistrer',
+    cancel: 'Annuler',
+    addNewCategory: '+ Ajouter une catégorie',
+    categoryId: 'ID de catégorie',
+    categoryName: 'Nom de catégorie',
+    categoryIcon: 'Icône / Émoji',
+    confirmDelete: 'Voulez-vous vraiment supprimer cet article ?',
+    confirmDeleteCat: 'Voulez-vous vraiment supprimer cette catégorie ?',
+    cloudSynced: 'Synchronisé avec le Cloud',
+    offlineMode: 'Mode Hors-ligne (Local)',
+    syncNow: 'Actualiser depuis le Cloud',
     settings: 'Paramètres',
     language: 'Langue',
     theme: 'Thème',
@@ -224,80 +179,52 @@ const TRANSLATIONS = {
     md: 'Moyen',
     lg: 'Grand',
     xl: 'Très Grand',
-    username: 'Nom d\'utilisateur',
-    password: 'Mot de passe',
-    signIn: 'Se Connecter',
-    logout: 'Se Déconnecter',
-    welcomeBack: 'Bon retour',
-    ordersToday: 'Commandes Aujourd\'hui',
-    pending: 'En attente',
-    revenueToday: 'Revenu Aujourd\'hui',
-    menuItems: 'Articles du Menu',
-    prep: 'Prép',
-    ready: 'Prêt',
-    complete: 'Terminer',
-    print: 'Imprimer',
-    actions: 'Actions',
-    time: 'Heure',
-    customer: 'Client',
-    items: 'Articles',
-    orderNum: 'Commande #',
-    status: 'Statut',
-    currentStatus: 'Statut Actuel',
-    recentOrders: 'Vos Commandes Récentes',
-    enterOrderNum: 'Entrez votre numéro de commande pour vérifier le statut',
-    orderNotFound: 'Commande Non Trouvée',
-    noRecentOrders: 'Aucune commande récente trouvée.',
-    estOrderId: 'ID Estimé',
-    pickup: 'Ramassage',
-    delivery: 'Livraison',
-    contactConfirm: 'Nous vous contacterons bientôt pour confirmer votre commande',
-    bakingTimer: 'Le chef Salwa cuisine',
-    orderReceivedDesc: 'Nous avons reçu votre commande',
-    preparingDesc: 'Le chef Salwa cuisine',
-    readyDesc: 'En cours de livraison',
-    completedDesc: 'Livré',
-    orderReceived: 'Commande Reçue',
-    preparing: 'En Préparation',
-    completed: 'Terminé',
-    location: 'Adresse de livraison',
-    locationPlaceholder: 'Ex: 123 Rue Principale, Toronto',
-    addedSuccess: 'Ajouté! ✓',
-    categories: 'Catégories',
-    addCategory: 'Ajouter une catégorie',
-    categoryId: 'ID de catégorie',
-    categoryName: 'Nom de la catégorie',
-    categoryIcon: 'Icône émoji',
-    goToDashboard: 'Aller au Tableau de Bord'
+    goToMenu: 'Voir le Menu en direct',
+    goToDashboard: 'Tableau de Bord',
+    dbSetupNotice: 'Liez une base Postgres dans Vercel Storage (Neon / Vercel Postgres) pour la synchronisation automatique.'
   },
   ar: {
+    brandName: 'مخبز سلوى',
     home: 'الرئيسية',
-    trackOrder: 'تتبع الطلب',
-    trackYourOrder: 'تتبع طلبك',
-    browseMenu: 'تصفح قائمتنا',
+    browseMenu: 'تصفح القائمة',
+    ourMenu: 'قائمتنا اللذيذة',
+    freshBaked: 'مخبوزات طازجة يومياً بأجود المكونات الطبيعية',
+    searchMenu: 'ابحث في أصناف القائمة...',
+    allItems: 'جميع الأصناف',
+    noItemsFound: 'لم يتم العثور على أي صنف.',
+    available: 'متوفر',
+    soldOut: 'نفذت الكمية',
     staffPortal: 'بوابة الموظفين',
-    ourMenu: 'قائمتنا',
-    freshBaked: 'خبز طازج يومياً بأجود المكونات',
-    searchMenu: 'ابحث في القائمة...',
-    addToCart: 'أضف إلى السلة',
-    addedToCart: 'تمت إضافته إلى السلة!',
-    yourCart: 'سلة المشتريات',
-    cartEmpty: 'السلة فارغة',
-    addTreats: 'أضف بعض الحلويات اللذيذة!',
-    total: 'المجموع',
-    proceedCheckout: 'متابعة الدفع',
-    checkout: 'إتمام الطلب',
-    customerName: 'اسم العميل',
-    phone: 'رقم الهاتف',
-    email: 'البريد الإلكتروني',
-    orderType: 'نوع الطلب',
-    specialNotes: 'ملاحظات خاصة',
-    orderSummary: 'ملخص الطلب',
-    placeOrder: 'إرسال الطلب',
-    placedSuccess: 'تم تقديم الطلب بنجاح!',
-    backMenu: 'العودة للقائمة',
-    datePlaced: 'تاريخ الطلب',
-    totalPaid: 'المجموع المدفوع',
+    staffLogin: 'تسجيل دخول الموظفين',
+    username: 'اسم المستخدم',
+    password: 'كلمة المرور',
+    signIn: 'تسجيل الدخول',
+    logout: 'تسجيل الخروج',
+    welcomeBack: 'مرحباً بك',
+    menuItems: 'أصناف القائمة',
+    categories: 'التصنيفات',
+    addNewItem: '+ إضافة صنف جديد',
+    editItem: 'تعديل الصنف',
+    deleteItem: 'حذف الصنف',
+    itemName: 'اسم الصنف',
+    category: 'التصنيف',
+    price: 'السعر',
+    description: 'الوصف',
+    image: 'الصورة',
+    status: 'الحالة',
+    inStock: 'متوفر',
+    outOfStock: 'نفذت الكمية',
+    saveChanges: 'حفظ التغييرات',
+    cancel: 'إلغاء',
+    addNewCategory: '+ إضافة تصنيف جديد',
+    categoryId: 'معرف التصنيف',
+    categoryName: 'اسم التصنيف',
+    categoryIcon: 'رمز تعبيري',
+    confirmDelete: 'هل أنت متأكد من حذف هذا الصنف؟',
+    confirmDeleteCat: 'هل أنت متأكد من حذف هذا التصنيف؟',
+    cloudSynced: 'متصل بالسحابة (محدث)',
+    offlineMode: 'الوضع المحلي (غير متصل بالسحابة)',
+    syncNow: 'تحديث من السحابة',
     settings: 'الإعدادات',
     language: 'اللغة',
     theme: 'المظهر',
@@ -313,51 +240,9 @@ const TRANSLATIONS = {
     md: 'متوسط',
     lg: 'كبير',
     xl: 'كبير جداً',
-    username: 'اسم المستخدم',
-    password: 'كلمة المرور',
-    signIn: 'تسجيل الدخول',
-    logout: 'تسجيل الخروج',
-    welcomeBack: 'مرحباً بعودتك',
-    ordersToday: 'طلبات اليوم',
-    pending: 'قيد الانتظار',
-    revenueToday: 'أرباح اليوم',
-    menuItems: 'أصناف القائمة',
-    prep: 'تجهيز',
-    ready: 'جاهز',
-    complete: 'مكتمل',
-    print: 'طباعة',
-    actions: 'إجراءات',
-    time: 'الوقت',
-    customer: 'العميل',
-    items: 'الطلبات',
-    orderNum: 'رقم الطلب',
-    status: 'الحالة',
-    currentStatus: 'الحالة الحالية',
-    recentOrders: 'طلباتك الأخيرة',
-    enterOrderNum: 'أدخل رقم طلبك للتحقق من الحالة',
-    orderNotFound: 'الطلب غير موجود',
-    noRecentOrders: 'لا توجد طلبات حديثة.',
-    estOrderId: 'رقم الطلب المتوقع',
-    pickup: 'استلام من المتجر',
-    delivery: 'توصيل',
-    contactConfirm: 'سنتصل بك قريباً لتأكيد طلبك',
-    bakingTimer: 'الشيف سلوى تقوم بالخبز الآن',
-    orderReceivedDesc: 'لقد استلمنا طلبك بنجاح',
-    preparingDesc: 'الشيف سلوى تقوم بالخبز',
-    readyDesc: 'خارج للتوصيل',
-    completedDesc: 'تم التوصيل',
-    orderReceived: 'تم استلام الطلب',
-    preparing: 'قيد التحضير',
-    completed: 'مكتمل',
-    location: 'عنوان التوصيل',
-    locationPlaceholder: 'مثال: 123 الشارع الرئيسي، تورونتو',
-    addedSuccess: 'تمت الإضافة! ✓',
-    categories: 'الفئات',
-    addCategory: 'إضافة فئة',
-    categoryId: 'معرف الفئة',
-    categoryName: 'اسم الفئة',
-    categoryIcon: 'رمز تعبيري',
-    goToDashboard: 'لوحة التحكم'
+    goToMenu: 'عرض القائمة للعملاء',
+    goToDashboard: 'لوحة التحكم',
+    dbSetupNotice: 'قم بربط قاعدة بيانات PostgreSQL في Vercel (Neon أو Vercel Postgres) لتفعيل المزامنة الفورية عبر كافة الأجهزة.'
   }
 };
 
@@ -370,4 +255,34 @@ function t(key) {
   const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
   return dict[key] !== undefined ? dict[key] : (TRANSLATIONS.en[key] || key);
 }
+
+/**
+ * Helper to escape HTML characters in strings to prevent XSS
+ */
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Helper to format price as currency (CAD / USD)
+ */
+function formatCurrency(num) {
+  const n = Number(num) || 0;
+  return `$${n.toFixed(2)}`;
+}
+
+/**
+ * Capitalize first letter of string
+ */
+function capitalize(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 
