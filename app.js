@@ -19,7 +19,7 @@ const state = {
   mobileMenuOpen:   false,
   toasts:           [],
   
-  // User Settings
+  // User Settings (Default: English)
   language:         'en',        // en | fr | ar
   theme:            'light',     // light | dark | cream
   fontSize:         'md',        // sm | md | lg | xl
@@ -29,7 +29,7 @@ const state = {
 
 window.state = state;
 
-// ── SVG Icon Registry ───────────────────────────────────────
+// ── Clean SVG Vector Icon Registry ───────────────────────────
 const SVG_ICONS = {
   all: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg>`,
   cakes: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v3c0 1.1.9 2 2 2zM12 5V2m-3 0h6M2 17c0 2.2 4 4 10 4s10-1.8 10-4m-20-7v7c0 2.2 4 4 10 4s10-1.8 10-4v-7"/></svg>`,
@@ -37,6 +37,9 @@ const SVG_ICONS = {
   cookies: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10c0-1-1.5-1.5-2.5-1.5S17 10 17 8.5s-.5-2.5-1.5-2.5S14 4.5 14 3.5s-.5-1.5-2-1.5zM7.5 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm6 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-5 2.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8.5-3a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>`,
   pastries: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-9 9l3 6 4-3 2 4 2-4 4 3 3-6a9 9 0 0 0-9-9zM6 12h12"/></svg>`,
   custom: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12m16-4H4c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2zM12 22V8m0 0a4 4 0 0 0 4-4c0-2-2-3-4-1m0 5a4 4 0 0 1-4-4c0-2 2-3 4-1"/></svg>`,
+  browseMenu: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+  location: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+  info: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
   search: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
   settings: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
   lock: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`,
@@ -45,11 +48,20 @@ const SVG_ICONS = {
   edit: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
   trash: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`,
   refresh: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`,
-  cloud: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
   check: `<svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
   menuIcon: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`,
   close: `<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
 };
+
+function getCategoryIcon(catId) {
+  if (catId === 'cakes') return SVG_ICONS.cakes;
+  if (catId === 'cupcakes') return SVG_ICONS.cupcakes;
+  if (catId === 'cookies') return SVG_ICONS.cookies;
+  if (catId === 'pastries') return SVG_ICONS.pastries;
+  if (catId === 'custom') return SVG_ICONS.custom;
+  if (catId === 'all') return SVG_ICONS.all;
+  return SVG_ICONS.pastries;
+}
 
 // ╔════════════════════════════════════════════════════════════╗
 // ║  INITIALISATION                                           ║
@@ -289,9 +301,9 @@ function render() {
 // ║  COMPONENTS: NAVBAR & SETTINGS                            ║
 // ╚════════════════════════════════════════════════════════════╝
 
-function renderNavbar(isTransparent = false) {
+function renderNavbar() {
   return `
-    <header class="navbar ${isTransparent ? 'navbar-transparent' : ''}">
+    <header class="navbar">
       <div class="nav-container">
         <a href="#landing" class="brand-logo">
           <img src="assets/logo.png" alt="Salwa's Bakery Logo" class="brand-img" onerror="this.style.display='none'" />
@@ -411,169 +423,38 @@ function renderSettingsModal() {
 }
 
 // ╔════════════════════════════════════════════════════════════╗
-// ║  VIEW: HOME / LANDING PAGE                                 ║
+// ║  VIEW: ORIGINAL GLASSMORPHIC LANDING PAGE                 ║
 // ╚════════════════════════════════════════════════════════════╝
 
 function renderLanding() {
-  const featured = state.menuItems.slice(0, 4);
-
   return `
-    ${renderNavbar(true)}
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-bg">
-        <img src="assets/hero.png" alt="Salwa's Bakery Fresh Treats" class="hero-bg-img" />
-        <div class="hero-overlay"></div>
-      </div>
-      <div class="hero-content">
-        <h1 class="hero-title animate-slide-up">${t('heroTitle')}</h1>
-        <p class="hero-subtitle animate-slide-up" style="animation-delay: 0.15s">
-          ${t('heroSub')}
-        </p>
-        <div class="hero-actions animate-slide-up" style="animation-delay: 0.3s">
-          <a href="#menu" class="btn btn-primary btn-lg">${t('browseMenu')}</a>
-          <a href="#staff-login" class="btn btn-outline btn-lg hero-outline-btn">${SVG_ICONS.lock} ${t('staffPortal')}</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Value Props Bar -->
-    <section class="value-props">
-      <div class="value-prop-item">
-        <span class="value-prop-icon">🌿</span>
-        <div>
-          <h4>${t('valueProp1Title')}</h4>
-          <p>${t('valueProp1Desc')}</p>
-        </div>
-      </div>
-      <div class="value-prop-item">
-        <span class="value-prop-icon">⏰</span>
-        <div>
-          <h4>${t('valueProp2Title')}</h4>
-          <p>${t('valueProp2Desc')}</p>
-        </div>
-      </div>
-      <div class="value-prop-item">
-        <span class="value-prop-icon">🎨</span>
-        <div>
-          <h4>${t('valueProp3Title')}</h4>
-          <p>${t('valueProp3Desc')}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Categories Showcase -->
-    <section class="section categories-section">
-      <div class="section-header">
-        <h2 class="section-title">${t('exploreCategories')}</h2>
-        <p class="section-subtitle">${t('exploreCategoriesSub')}</p>
-      </div>
-
-      <div class="category-cards-grid">
-        ${CATEGORIES.filter(c => c.id !== 'all').map(cat => `
-          <div class="category-showcase-card" data-action="go-to-category" data-category="${cat.id}">
-            <div class="cat-card-icon">${cat.icon || '✨'}</div>
-            <h3 class="cat-card-name">${escapeHtml(cat.name)}</h3>
-            <span class="cat-card-arrow">View &rarr;</span>
+    <div class="landing-page" style="background-image: url('assets/hero.png')">
+      <div class="landing-overlay"></div>
+      <div class="landing-content">
+        <div class="glass-card landing-card">
+          <img src="assets/logo.png" alt="Salwa's Bakery Logo" class="landing-logo" />
+          <h1 class="landing-title">Salwa's Bakery</h1>
+          <p class="landing-subtitle">${state.language === 'ar' ? 'صنع بكل حب · كندا، GTA' : (state.language === 'fr' ? 'Fait à la main avec amour · Canada, GTA' : 'Handcrafted with Love · Canada, GTA')}</p>
+          <div class="landing-buttons">
+            <a href="#menu" class="btn btn-primary btn-lg">
+              ${SVG_ICONS.browseMenu} ${t('browseMenu')}
+            </a>
+            <a href="#staff-login" class="btn btn-outline btn-sm" style="margin-top: 10px; border-color: rgba(26,26,46,0.2); color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              ${SVG_ICONS.lock} ${t('staffPortal')}
+            </a>
           </div>
-        `).join('')}
-      </div>
-    </section>
-
-    <!-- Featured Menu Items -->
-    <section class="section featured-section">
-      <div class="section-header">
-        <h2 class="section-title">${t('featuredTitle')}</h2>
-        <p class="section-subtitle">${t('featuredSub')}</p>
-      </div>
-
-      <div class="menu-grid">
-        ${featured.map(item => {
-          const isAvailable = item.available !== false;
-          const catObj = CATEGORIES.find(c => c.id === item.category);
-          const catName = catObj ? catObj.name : capitalize(item.category);
-          const catIcon = catObj ? (catObj.icon || '') : '';
-
-          return `
-            <article class="menu-card ${!isAvailable ? 'card-sold-out' : ''}">
-              <div class="card-image-wrap">
-                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='assets/cake.png'" />
-                <span class="card-category-badge">${catIcon} ${escapeHtml(catName)}</span>
-                ${!isAvailable ? `<span class="badge-sold-out">${t('soldOut')}</span>` : ''}
-              </div>
-              <div class="card-body">
-                <div class="card-header-row">
-                  <h3 class="card-title">${escapeHtml(item.name)}</h3>
-                  <span class="card-price">${formatCurrency(item.price)}</span>
-                </div>
-                <p class="card-desc">${escapeHtml(item.description)}</p>
-              </div>
-            </article>
-          `;
-        }).join('')}
-      </div>
-
-      <div class="text-center" style="margin-top: 40px; text-align: center;">
-        <a href="#menu" class="btn btn-outline btn-lg">${t('viewFullMenu')}</a>
-      </div>
-    </section>
-
-    <!-- Customer Reviews -->
-    <section class="section reviews-section">
-      <div class="section-header">
-        <h2 class="section-title">${t('reviewsTitle')}</h2>
-        <p class="section-subtitle">${t('reviewsSub')}</p>
-      </div>
-
-      <div class="reviews-grid">
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"The Red Velvet Cake for our celebration was absolutely delicious! Incredibly moist, with silky smooth cream cheese frosting."</p>
-          <div class="review-author">
-            <strong>Sarah M.</strong>
-            <span>Toronto, ON</span>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"The rose pistachio cupcakes are heavenly! The aroma, the texture, everything is top notch. Truly authentic taste."</p>
-          <div class="review-author">
-            <strong>Omar K.</strong>
-            <span>Mississauga, ON</span>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"Best French macarons in the GTA hands down. Crispy shell, chewy center, perfect fillings. 10/10!"</p>
-          <div class="review-author">
-            <strong>Elena R.</strong>
-            <span>Oakville, ON</span>
-          </div>
+          <p class="landing-footer">
+            <span style="display: inline-flex; align-items: center; gap: 4px;">${SVG_ICONS.location} Canada, GTA</span> · 
+            <a href="https://www.instagram.com/salwas.bakery" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="display: inline-block; vertical-align: middle;">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              <span>@salwas.bakery</span>
+            </a>
+          </p>
         </div>
       </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-brand">
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-            <img src="assets/logo.png" alt="Salwa's Bakery" style="height: 32px; border-radius: 50%;" />
-            <h3 style="margin: 0; color: var(--pink-primary); font-family: var(--font-serif);">${t('brandName')}</h3>
-          </div>
-          <p class="text-muted" style="font-size: 0.9rem;">Handcrafted cakes, cupcakes & pastries in Canada, GTA.</p>
-        </div>
-        <div class="footer-nav-col">
-          <a href="#landing" style="margin-right: 16px;">${t('home')}</a>
-          <a href="#menu" style="margin-right: 16px;">${t('ourMenu')}</a>
-          <a href="#staff-login" class="footer-staff-link">${SVG_ICONS.lock} ${t('staffPortal')}</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; ${new Date().getFullYear()} ${t('brandName')}. All rights reserved.</p>
-      </div>
-    </footer>
+    </div>
   `;
 }
 
@@ -593,7 +474,7 @@ function renderMenu() {
     : filtered;
 
   return `
-    ${renderNavbar(false)}
+    ${renderNavbar()}
 
     <main class="menu-page">
       <!-- Header -->
@@ -625,7 +506,7 @@ function renderMenu() {
               return `
                 <button class="cat-tab ${state.selectedCategory === cat.id ? 'active' : ''}"
                         data-action="select-category" data-category="${cat.id}">
-                  <span class="cat-icon">${cat.icon || '✨'}</span>
+                  <span class="cat-icon">${getCategoryIcon(cat.id)}</span>
                   <span class="cat-name">${escapeHtml(cat.name)}</span>
                   <span class="cat-count">(${count})</span>
                 </button>
@@ -652,13 +533,12 @@ function renderMenu() {
               const isAvailable = item.available !== false;
               const catObj = CATEGORIES.find(c => c.id === item.category);
               const catName = catObj ? catObj.name : capitalize(item.category);
-              const catIcon = catObj ? (catObj.icon || '') : '';
 
               return `
                 <article class="menu-card ${!isAvailable ? 'card-sold-out' : ''}" style="animation-delay: ${index * 0.04}s">
                   <div class="card-image-wrap">
                     <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='assets/cake.png'" />
-                    <span class="card-category-badge">${catIcon} ${escapeHtml(catName)}</span>
+                    <span class="card-category-badge">${getCategoryIcon(item.category)} ${escapeHtml(catName)}</span>
                     ${!isAvailable ? `<span class="badge-sold-out">${t('soldOut')}</span>` : ''}
                   </div>
                   <div class="card-body">
@@ -693,7 +573,7 @@ function renderMenu() {
 
 function renderStaffLogin() {
   return `
-    ${renderNavbar(false)}
+    ${renderNavbar()}
 
     <div class="auth-container">
       <div class="auth-card animate-slide-up">
@@ -736,7 +616,7 @@ function renderDashboard() {
   const soldOutCount = state.menuItems.filter(i => i.available === false).length;
 
   return `
-    ${renderNavbar(false)}
+    ${renderNavbar()}
 
     <div class="dashboard-page animate-fade-in">
       <div class="portal-header">
@@ -767,7 +647,7 @@ function renderDashboard() {
 
       ${state.cloudConnected === false ? `
         <div class="db-notice-card">
-          <div class="db-notice-icon">💡</div>
+          <div class="db-notice-icon">${SVG_ICONS.info}</div>
           <div class="db-notice-body">
             <strong>Cross-Device Sync Setup:</strong>
             <p>${t('dbSetupNotice')}</p>
@@ -881,7 +761,7 @@ function renderDashboard() {
             return `
               <div class="category-card">
                 <div class="cat-card-info">
-                  <span class="cat-card-icon">${cat.icon || '✨'}</span>
+                  <span class="cat-card-icon">${getCategoryIcon(cat.id)}</span>
                   <div>
                     <h4>${escapeHtml(cat.name)}</h4>
                     <span class="text-muted" style="font-size: 0.8rem;">ID: ${escapeHtml(cat.id)} • ${count} items</span>
@@ -946,7 +826,7 @@ function renderMenuItemModal() {
               <select name="itemCategory" required>
                 ${CATEGORIES.filter(c => c.id !== 'all').map(c => `
                   <option value="${c.id}" ${isEdit && item.category === c.id ? 'selected' : ''}>
-                    ${c.icon || ''} ${c.name}
+                    ${c.name}
                   </option>
                 `).join('')}
               </select>
@@ -976,11 +856,11 @@ function renderMenuItemModal() {
 
             <div class="preset-assets-selector">
               <span class="text-muted" style="font-size: 0.8rem;">Presets:</span>
-              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cake.png">🎂 Cake</button>
-              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cupcake.png">🧁 Cupcake</button>
-              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cookie.png">🍪 Cookie</button>
-              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/pastry.png">🥐 Pastry</button>
-              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/custom_cake.png">🎀 Custom</button>
+              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cake.png">Cake</button>
+              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cupcake.png">Cupcake</button>
+              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/cookie.png">Cookie</button>
+              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/pastry.png">Pastry</button>
+              <button type="button" class="preset-pill" data-action="pick-preset-img" data-img="assets/custom_cake.png">Custom</button>
             </div>
           </div>
 
@@ -1018,16 +898,9 @@ function renderCategoryModal() {
             <input type="text" name="catName" required placeholder="e.g. Cold Drinks" />
           </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label>${t('categoryId')} (slug) *</label>
-              <input type="text" name="catId" required placeholder="e.g. drinks" />
-            </div>
-
-            <div class="form-group">
-              <label>${t('categoryIcon')} (Emoji)</label>
-              <input type="text" name="catIcon" placeholder="e.g. 🍹" maxlength="4" />
-            </div>
+          <div class="form-group">
+            <label>${t('categoryId')} (slug) *</label>
+            <input type="text" name="catId" required placeholder="e.g. drinks" />
           </div>
 
           <div class="modal-footer-btns">
@@ -1058,11 +931,6 @@ function handleGlobalClick(e) {
     case 'select-category':
       state.selectedCategory = target.dataset.category;
       render();
-      break;
-
-    case 'go-to-category':
-      state.selectedCategory = target.dataset.category;
-      window.location.hash = '#menu';
       break;
 
     case 'clear-search':
@@ -1272,7 +1140,6 @@ function handleGlobalSubmit(e) {
     const data = new FormData(form);
     const name = (data.get('catName') || '').trim();
     let id = (data.get('catId') || '').trim().toLowerCase().replace(/\s+/g, '-');
-    const icon = (data.get('catIcon') || '✨').trim();
 
     if (!id) id = name.toLowerCase().replace(/\s+/g, '-');
 
@@ -1281,7 +1148,7 @@ function handleGlobalSubmit(e) {
       return;
     }
 
-    CATEGORIES.push({ id, name, icon });
+    CATEGORIES.push({ id, name, iconKey: id });
     state.categoryModalOpen = false;
     saveCategories();
     render();
@@ -1289,7 +1156,6 @@ function handleGlobalSubmit(e) {
 }
 
 function handleGlobalInput(e) {
-  // Real-time search in menu view
   if (e.target.id === 'menuSearch') {
     state.searchQuery = e.target.value;
     const gridSection = document.querySelector('.menu-grid-section');
@@ -1319,13 +1185,12 @@ function handleGlobalInput(e) {
               const isAvailable = item.available !== false;
               const catObj = CATEGORIES.find(c => c.id === item.category);
               const catName = catObj ? catObj.name : capitalize(item.category);
-              const catIcon = catObj ? (catObj.icon || '') : '';
 
               return `
                 <article class="menu-card ${!isAvailable ? 'card-sold-out' : ''}">
                   <div class="card-image-wrap">
                     <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='assets/cake.png'" />
-                    <span class="card-category-badge">${catIcon} ${escapeHtml(catName)}</span>
+                    <span class="card-category-badge">${getCategoryIcon(item.category)} ${escapeHtml(catName)}</span>
                     ${!isAvailable ? `<span class="badge-sold-out">${t('soldOut')}</span>` : ''}
                   </div>
                   <div class="card-body">
@@ -1344,7 +1209,6 @@ function handleGlobalInput(e) {
     }
   }
 
-  // URL input for modal image preview
   if (e.target.id === 'itemImageUrlInput') {
     const val = e.target.value.trim();
     const preview = document.getElementById('itemImagePreview');

@@ -39,16 +39,15 @@ const DEFAULT_MENU_ITEMS = [
 ];
 
 /**
- * Menu categories with display names and emoji icons.
- * "all" is a virtual category showing every item.
+ * Menu categories with display names and SVG icon identifiers.
  */
 let CATEGORIES = [
-  { id: 'all',      name: 'All Items',          icon: '✨' },
-  { id: 'cakes',    name: 'Cakes',              icon: '🎂' },
-  { id: 'cupcakes', name: 'Cupcakes',           icon: '🧁' },
-  { id: 'cookies',  name: 'Cookies & Macarons', icon: '🍪' },
-  { id: 'pastries', name: 'Pastries',           icon: '🥐' },
-  { id: 'custom',   name: 'Custom Orders',      icon: '🎀' },
+  { id: 'all',      name: 'All Items',          iconKey: 'all' },
+  { id: 'cakes',    name: 'Cakes',              iconKey: 'cakes' },
+  { id: 'cupcakes', name: 'Cupcakes',           iconKey: 'cupcakes' },
+  { id: 'cookies',  name: 'Cookies & Macarons', iconKey: 'cookies' },
+  { id: 'pastries', name: 'Pastries',           iconKey: 'pastries' },
+  { id: 'custom',   name: 'Custom Orders',      iconKey: 'custom' },
 ];
 
 /** Hard-coded staff credentials. */
@@ -58,7 +57,7 @@ const STAFF_CREDENTIALS = {
 };
 
 // ============================================================
-//  TRANSLATIONS & LOCALISATION DICTIONARY
+//  TRANSLATIONS & LOCALISATION DICTIONARY (Default: English)
 // ============================================================
 const TRANSLATIONS = {
   en: {
@@ -97,7 +96,7 @@ const TRANSLATIONS = {
     addNewCategory: '+ Add Category',
     categoryId: 'Category ID',
     categoryName: 'Category Name',
-    categoryIcon: 'Emoji / Icon',
+    categoryIcon: 'Icon Identifier',
     confirmDelete: 'Are you sure you want to delete this item?',
     confirmDeleteCat: 'Are you sure you want to delete this category? Items in this category will become uncategorized.',
     cloudSynced: 'Cloud Synced',
@@ -120,22 +119,7 @@ const TRANSLATIONS = {
     xl: 'Extra Large',
     goToMenu: 'View Live Menu',
     goToDashboard: 'Staff Dashboard',
-    dbSetupNotice: 'Connect a Postgres database in your Vercel project (via Vercel Storage -> Neon or Vercel Postgres) to enable automatic cloud synchronization across all devices.',
-    heroTitle: 'Handcrafted with Love,<br/>Baked to Perfection',
-    heroSub: 'Artisanal cakes, cupcakes, pastries & custom confections freshly baked every morning in Canada, GTA.',
-    valueProp1Title: '100% Fresh Ingredients',
-    valueProp1Desc: 'Real butter, organic flour & premium Belgian chocolate',
-    valueProp2Title: 'Baked Fresh Daily',
-    valueProp2Desc: 'Every single pastry is baked the morning you enjoy it',
-    valueProp3Title: 'Custom Cake Designs',
-    valueProp3Desc: 'Personalized decorations for your most memorable events',
-    exploreCategories: 'Explore Our Categories',
-    exploreCategoriesSub: 'From delicate macarons to show-stopping multi-tier celebration cakes',
-    featuredTitle: 'Customer Favourites',
-    featuredSub: 'Our most cherished baked creations, handpicked for you',
-    viewFullMenu: 'View Full Menu &rarr;',
-    reviewsTitle: 'What Our Customers Say',
-    reviewsSub: 'Over 500+ happy celebrations sweetened by Salwa\'s Bakery'
+    dbSetupNotice: 'Connect a Postgres database in your Vercel project (via Vercel Storage -> Neon or Vercel Postgres) to enable automatic cloud synchronization across all devices.'
   },
   fr: {
     brandName: "Salwa's Bakery",
@@ -173,7 +157,7 @@ const TRANSLATIONS = {
     addNewCategory: '+ Ajouter une catégorie',
     categoryId: 'ID de catégorie',
     categoryName: 'Nom de catégorie',
-    categoryIcon: 'Icône / Émoji',
+    categoryIcon: 'Identifiant d\'icône',
     confirmDelete: 'Voulez-vous vraiment supprimer cet article ?',
     confirmDeleteCat: 'Voulez-vous vraiment supprimer cette catégorie ?',
     cloudSynced: 'Synchronisé avec le Cloud',
@@ -196,22 +180,7 @@ const TRANSLATIONS = {
     xl: 'Très Grand',
     goToMenu: 'Voir le Menu en direct',
     goToDashboard: 'Tableau de Bord',
-    dbSetupNotice: 'Liez une base Postgres dans Vercel Storage (Neon / Vercel Postgres) pour la synchronisation automatique.',
-    heroTitle: 'Fait à la main avec amour,<br/>Cuit à la perfection',
-    heroSub: 'Gâteaux artisanaux, cupcakes et pâtisseries cuits frais chaque matin au Canada, GTA.',
-    valueProp1Title: 'Ingrédients 100% Frais',
-    valueProp1Desc: 'Vrai beurre, farine biologique et chocolat belge de qualité',
-    valueProp2Title: 'Cuit Frais Tous les Jours',
-    valueProp2Desc: 'Chaque pâtisserie est préparée et cuite le matin même',
-    valueProp3Title: 'Créations Personnalisées',
-    valueProp3Desc: 'Décorations sur mesure pour vos moments inoubliables',
-    exploreCategories: 'Découvrez Nos Catégories',
-    exploreCategoriesSub: 'Des macarons délicats aux superbes gâteaux de célébration',
-    featuredTitle: 'Les Favoris de nos Clients',
-    featuredSub: 'Nos créations les plus appréciées, sélectionnées pour vous',
-    viewFullMenu: 'Voir Tout le Menu &rarr;',
-    reviewsTitle: 'Ce Que Disent Nos Clients',
-    reviewsSub: 'Plus de 500+ célébrations adoucies par Salwa\'s Bakery'
+    dbSetupNotice: 'Liez une base Postgres dans Vercel Storage (Neon / Vercel Postgres) pour la synchronisation automatique.'
   },
   ar: {
     brandName: 'مخبز سلوى',
@@ -249,7 +218,7 @@ const TRANSLATIONS = {
     addNewCategory: '+ إضافة تصنيف جديد',
     categoryId: 'معرف التصنيف',
     categoryName: 'اسم التصنيف',
-    categoryIcon: 'رمز تعبيري',
+    categoryIcon: 'رمز الأيقونة',
     confirmDelete: 'هل أنت متأكد من حذف هذا الصنف؟',
     confirmDeleteCat: 'هل أنت متأكد من حذف هذا التصنيف؟',
     cloudSynced: 'متصل بالسحابة (محدث)',
@@ -272,22 +241,7 @@ const TRANSLATIONS = {
     xl: 'كبير جداً',
     goToMenu: 'عرض القائمة للعملاء',
     goToDashboard: 'لوحة التحكم',
-    dbSetupNotice: 'قم بربط قاعدة بيانات PostgreSQL في Vercel (Neon أو Vercel Postgres) لتفعيل المزامنة الفورية عبر كافة الأجهزة.',
-    heroTitle: 'صنع بكل حب،<br/>مخبوز بإتقان',
-    heroSub: 'كيك وحلويات ومعجنات فاخرة ومخبوزة طازجة كل صباح في كندا، GTA.',
-    valueProp1Title: 'مكونات طبيعية 100%',
-    valueProp1Desc: 'زبدة نقية، طحين عضوي، وشوكولاتة بلجيكية فاخرة',
-    valueProp2Title: 'مخبوز طازج يومياً',
-    valueProp2Desc: 'كل قطعة تخبز بعناية في صباح يوم استلامها',
-    valueProp3Title: 'تصاميم كيك مخصصة',
-    valueProp3Desc: 'تزيين استثنائي ومخصص لأجمل مناسباتكم واحتفالاتكم',
-    exploreCategories: 'استكشف تصنيفاتنا',
-    exploreCategoriesSub: 'من الماكرون الفرنسي الرقيق إلى قوالب الكيك الاحتفالية الفاخرة',
-    featuredTitle: 'المفضلة لدى عملائنا',
-    featuredSub: 'أشهى ابتكاراتنا المختارة بعناية لتنال إعجابكم',
-    viewFullMenu: 'عرض كامل القائمة &larr;',
-    reviewsTitle: 'آراء عملائنا',
-    reviewsSub: 'أكثر من 500+ مناسبة واحتفال تم تحليتها بمخبوزات سلوى'
+    dbSetupNotice: 'قم بربط قاعدة بيانات PostgreSQL في Vercel (Neon أو Vercel Postgres) لتفعيل المزامنة الفورية عبر كافة الأجهزة.'
   }
 };
 
