@@ -427,33 +427,39 @@ function renderSettingsModal() {
 // ╚════════════════════════════════════════════════════════════╝
 
 function renderLanding() {
+  const sub = state.language === 'ar' ? 'صنع بكل حب · كندا، GTA' : (state.language === 'fr' ? 'Fait à la main avec amour · Canada, GTA' : 'Handcrafted with Love · Canada, GTA');
+  const ribbon = CATEGORIES.filter(c => c.id !== 'all').map(c => `<span>${escapeHtml(c.name)}</span>`).join('<i>✦</i>');
   return `
-    <div class="landing-page" style="background-image: url('assets/hero.png')">
-      <div class="landing-overlay"></div>
+    <div class="landing-page">
       <div class="landing-content">
-        <div class="glass-card landing-card">
-          <img src="assets/logo.png" alt="Salwa's Bakery Logo" class="landing-logo" />
-          <h1 class="landing-title">Salwa's Bakery</h1>
-          <p class="landing-subtitle">${state.language === 'ar' ? 'صنع بكل حب · كندا، GTA' : (state.language === 'fr' ? 'Fait à la main avec amour · Canada, GTA' : 'Handcrafted with Love · Canada, GTA')}</p>
+        <div class="landing-card">
+          <div class="landing-stamp">
+            <img src="assets/logo.png" alt="Salwa's Bakery Logo" class="landing-logo" />
+          </div>
+          <h1 class="landing-title">Salwa's <em>Bakery</em></h1>
+          <p class="landing-subtitle">${sub}</p>
           <div class="landing-buttons">
             <a href="#menu" class="btn btn-primary btn-lg">
               ${SVG_ICONS.browseMenu} ${t('browseMenu')}
             </a>
-            <a href="#staff-login" class="btn btn-outline btn-sm" style="margin-top: 10px; border-color: rgba(26,26,46,0.2); color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="#staff-login" class="btn btn-outline btn-sm">
               ${SVG_ICONS.lock} ${t('staffPortal')}
             </a>
           </div>
           <p class="landing-footer">
-            <span style="display: inline-flex; align-items: center; gap: 4px;">${SVG_ICONS.location} Canada, GTA</span> · 
-            <a href="https://www.instagram.com/salwas.bakery" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="display: inline-block; vertical-align: middle;">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-              </svg>
+            <span class="lf-item">${SVG_ICONS.location} Canada, GTA</span>
+            <a class="lf-item" href="https://www.instagram.com/salwas.bakery" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               <span>@salwas.bakery</span>
             </a>
           </p>
         </div>
+        <figure class="landing-figure">
+          <img src="assets/hero.png" alt="" />
+          <figcaption>${t('freshBaked')}</figcaption>
+        </figure>
       </div>
+      <div class="landing-ribbon" aria-hidden="true"><div class="ribbon-track">${ribbon}<i>✦</i>${ribbon}<i>✦</i>${ribbon}<i>✦</i></div></div>
     </div>
   `;
 }
